@@ -3,665 +3,605 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kyrgyz View – Discover the Beauty of Kyrgyzstan</title>
+  <title>KyrgyzView — Tour Guide in Kyrgyzstan</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Darker+Grotesque:wght@700&family=Gantari:wght@600&family=Denk+One&display=swap" rel="stylesheet" />
+
   <style>
-    /* ========== DESIGN TOKENS ========== */
+    /* ─── DESIGN TOKENS ───────────────────────────── */
     :root {
-      --color-purple:        #533352;
-      --color-yellow:        #ffc65e;
-      --color-yellow-light:  rgba(255, 198, 94, 0.47);
-      --color-white:         #ffffff;
-      --color-green:         #005107;
-      --color-red:           #510001;
-      --color-black:         #000000;
+      --purple:      #533352;
+      --yellow:      #ffc65e;
+      --white:       #ffffff;
+      --near-black:  #1a0a19;
 
-      --font-anton:    'Anton SC', sans-serif;
-      --font-darker:   'Darker Grotesque', sans-serif;
-      --font-gantari:  'Gantari', sans-serif;
-      --font-denk:     'Denk One', sans-serif;
-      /* ZT Glora Pro is not on Google Fonts – fall back gracefully */
-      --font-glora:    'Georgia', serif;
+      --font-heading: 'Anton SC', sans-serif;
+      --font-ui:      'Gantari', sans-serif;
+      --font-nav:     'Darker Grotesque', sans-serif;
 
-      --radius-card:   11px;
-      --radius-btn:    10px;
-      --radius-hero:   30px;
+      --r-card:    11px;
+      --r-hero:    41px;
+      --r-section: 37px;
+      --r-pill:    999px;
 
-      --sp-1: 8px;
-      --sp-2: 16px;
-      --sp-3: 24px;
-      --sp-4: 32px;
-      --sp-5: 48px;
-      --sp-6: 64px;
-
-      --max-content: 1400px;
+      --nav-h: 86px;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* ========== RESET / BASE ========== */
+    /* ─── RESET ───────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
-      font-family: var(--font-glora);
-      background: var(--color-white);
-      color: var(--color-purple);
+      font-family: var(--font-ui);
+      background: var(--white);
+      color: var(--purple);
       overflow-x: hidden;
     }
     img { display: block; max-width: 100%; }
-    a  { text-decoration: none; color: inherit; }
-    ul { list-style: none; }
+    a { text-decoration: none; color: inherit; }
 
-    /* ========== LAYOUT HELPERS ========== */
-    .container {
-      width: 100%;
-      max-width: var(--max-content);
-      margin-inline: auto;
-      padding-inline: var(--sp-5);
+    /* ─── LOADING SCREEN ──────────────────────────── */
+    #loader {
+      position: fixed; inset: 0;
+      background: var(--purple);
+      z-index: 9999;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 24px;
+      transition: opacity .6s var(--ease-out), visibility .6s;
     }
+    #loader.done { opacity: 0; visibility: hidden; pointer-events: none; }
+    .ld-logo {
+      font-family: var(--font-heading);
+      font-size: 52px; letter-spacing: .06em; color: var(--yellow);
+      animation: ldPulse 1.1s ease-in-out infinite alternate;
+    }
+    .ld-bar { width: 200px; height: 3px; background: rgba(255,255,255,.15); border-radius: 99px; overflow: hidden; }
+    .ld-fill { height: 100%; background: var(--yellow); border-radius: 99px; animation: ldFill 1.5s forwards ease-in-out; }
+    @keyframes ldPulse { from { opacity:.6 } to { opacity:1 } }
+    @keyframes ldFill  { from { width:0 }   to   { width:100% } }
 
-    /* ========== HEADER / NAV ========== */
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--color-white);
-      padding: 12px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 2px 12px rgba(83,51,82,0.07);
-    }
-
-    /* Logo */
-    .header__logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-    .header__logo-emblem {
-      width: 68px;
-      height: 68px;
-      position: relative;
-      flex-shrink: 0;
-    }
-    .header__logo-emblem img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-    .header__logo-text {
-      font-family: var(--font-darker);
-      font-weight: 700;
-      font-size: 20px;
-      color: var(--color-purple);
-      line-height: 1.1;
-      letter-spacing: 0.04em;
-      text-align: center;
+    /* ─── CURSOR DOT ──────────────────────────────── */
+    #cdot {
+      pointer-events: none; position: fixed; top: 0; left: 0;
+      width: 10px; height: 10px; background: var(--yellow);
+      border-radius: 50%; transform: translate(-50%,-50%);
+      z-index: 9998; mix-blend-mode: multiply;
     }
 
-    /* Nav links */
-    .nav { display: flex; align-items: center; gap: 0; }
-    .nav__list {
-      display: flex;
-      align-items: center;
-      gap: 0;
+    /* ─── SCROLL REVEAL ───────────────────────────── */
+    .sr {
+      opacity: 0; transform: translateY(36px);
+      transition: opacity .75s var(--ease-out), transform .75s var(--ease-out);
     }
-    .nav__item { position: relative; }
-    .nav__item + .nav__item::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      height: 46px;
-      width: 1.5px;
-      background: var(--color-purple);
-    }
-    .nav__link {
-      display: block;
-      font-family: var(--font-darker);
-      font-weight: 700;
-      font-size: 22px;
-      color: var(--color-purple);
-      padding: 8px 28px;
-      letter-spacing: 0.05em;
-      transition: color 0.2s;
-    }
-    .nav__link:hover { color: var(--color-yellow); }
+    .sr.in { opacity: 1; transform: translateY(0); }
 
-    /* Hamburger (hidden on desktop) */
-    .nav__hamburger {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      gap: 5px;
-      width: 36px;
-      height: 36px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
-      z-index: 110;
+    /* ─── NAVBAR ──────────────────────────────────── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--nav-h); z-index: 500;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px;
+      background: rgba(255,255,255,.94);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      transition: box-shadow .3s var(--ease-out);
     }
-    .nav__hamburger span {
-      display: block;
-      width: 100%;
-      height: 3px;
-      background: var(--color-purple);
-      border-radius: 2px;
-      transition: transform 0.3s, opacity 0.3s;
-    }
-    .nav__hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-    .nav__hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
-    .nav__hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    .nav.scrolled { box-shadow: 0 2px 28px rgba(83,51,82,.13); }
 
-    /* Mobile menu overlay */
-    .nav__menu {
-      display: flex;
-      align-items: center;
-    }
+    .nav__logo { display: flex; align-items: center; text-decoration: none; }
+    .nav__logo img { width: 72px; height: 72px; object-fit: contain; }
 
-    /* ========== HERO ========== */
-    .hero {
-      width: calc(100% - 60px);
-      max-width: 1820px;
-      margin: 24px auto 0;
-      border-radius: var(--radius-hero);
-      overflow: hidden;
-      position: relative;
-      min-height: 560px;
+    .nav__links { display: flex; align-items: center; list-style: none; }
+    .nav__links li { display: flex; align-items: center; }
+    .nav__sep { width: 1px; height: 42px; background: var(--purple); opacity: .28; margin: 0 4px; }
+    .nav__links a {
+      font-family: var(--font-nav); font-weight: 700; font-size: 20px; color: var(--purple);
+      padding: 6px 20px; position: relative; transition: opacity .25s;
+    }
+    .nav__links a::after {
+      content: ''; position: absolute; bottom: 0; left: 20px; right: 20px;
+      height: 2px; background: var(--yellow);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .3s var(--ease-out);
+    }
+    .nav__links a:hover { opacity: .72; }
+    .nav__links a:hover::after { transform: scaleX(1); }
+
+    .nav__burger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; background: none; border: none;
+      padding: 10px; border-radius: 8px; transition: background .2s;
+    }
+    .nav__burger:hover { background: rgba(83,51,82,.07); }
+    .nav__burger span {
+      display: block; width: 26px; height: 2.5px;
+      background: var(--purple); border-radius: 2px;
+      transition: transform .35s var(--ease-out), opacity .25s;
+    }
+    .nav__burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .nav__burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .nav__burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+    .nav__mob {
+      position: fixed; top: var(--nav-h); left: 0; right: 0; z-index: 490;
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      list-style: none; display: flex; flex-direction: column;
+      max-height: 0; overflow: hidden;
+      transition: max-height .5s var(--ease-out);
+      box-shadow: 0 8px 40px rgba(83,51,82,.12);
+    }
+    .nav__mob.open { max-height: 360px; }
+    .nav__mob a {
+      display: block; font-family: var(--font-nav); font-weight: 700; font-size: 22px;
+      color: var(--purple); padding: 18px 28px;
+      border-bottom: 1px solid rgba(83,51,82,.08);
+      transition: background .2s, padding-left .25s var(--ease-out);
+    }
+    .nav__mob a:hover { background: rgba(255,198,94,.1); padding-left: 38px; }
+
+    /* ─── HERO ────────────────────────────────────── */
+    .hero { padding-top: var(--nav-h); padding: var(--nav-h) 14px 0; }
+    .hero__wrap {
+      border-radius: var(--r-hero); overflow: hidden;
+      position: relative; min-height: 560px;
+      display: flex; align-items: center; justify-content: center; text-align: center;
     }
     .hero__bg {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 120%;
-      top: -10%;
-      object-fit: cover;
-      object-position: center;
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+      transform: scale(1.06); transition: transform 9s ease-out; filter: brightness(.8);
     }
-    .hero__overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(0,0,0,0.15) 0%,
-        rgba(0,0,0,0.3) 60%,
-        rgba(0,0,0,0.55) 100%
-      );
+    .hero__bg.ready { transform: scale(1); }
+    .hero__veil {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(83,51,82,.2) 0%, rgba(0,0,0,.1) 45%, rgba(83,51,82,.38) 100%);
     }
-    .hero__content {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 80px 40px 70px;
-      min-height: 560px;
+    .hero__body {
+      position: relative; z-index: 2;
+      padding: 100px 24px 80px;
+      display: flex; flex-direction: column; align-items: center; gap: 28px;
     }
     .hero__title {
-      font-family: var(--font-anton);
-      font-size: clamp(36px, 5.5vw, 86px);
-      color: var(--color-white);
-      line-height: 1.05;
-      margin-bottom: 22px;
-      text-shadow: 0 2px 18px rgba(0,0,0,0.3);
+      font-family: var(--font-heading);
+      font-size: clamp(38px, 6vw, 89px); color: var(--white); line-height: 1;
+      text-shadow: 0 4px 28px rgba(0,0,0,.4);
+      animation: heroUp .9s .15s both var(--ease-out);
     }
-    .hero__subtitle {
-      font-family: var(--font-glora);
-      font-size: clamp(16px, 2.2vw, 38px);
-      color: var(--color-white);
-      line-height: 1.55;
-      margin-bottom: 46px;
-      text-shadow: 0 1px 8px rgba(0,0,0,0.4);
+    .hero__sub {
+      font-size: clamp(17px, 2.4vw, 38px); color: var(--white); line-height: 1.55;
+      text-shadow: 0 2px 14px rgba(0,0,0,.32);
+      animation: heroUp .9s .35s both var(--ease-out);
     }
-    .hero__cta {
-      display: flex;
-      gap: 28px;
-      flex-wrap: wrap;
-      justify-content: center;
+    .hero__book {
+      display: inline-flex; align-items: center; gap: 14px;
+      background: var(--white); border-radius: var(--r-pill); padding: 14px 36px;
+      animation: heroUp .9s .55s both var(--ease-out);
+      transition: transform .3s var(--ease-out), box-shadow .3s var(--ease-out); cursor: pointer;
     }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--color-white);
-      border-radius: var(--radius-btn);
-      padding: 14px 32px;
-      font-family: var(--font-gantari);
-      font-weight: 600;
-      font-size: clamp(15px, 1.6vw, 26px);
-      white-space: nowrap;
-      transition: transform 0.15s, box-shadow 0.15s;
-      cursor: pointer;
-      border: none;
-    }
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.18); }
-    .btn--whatsapp { color: var(--color-green); }
-    .btn--instagram { color: var(--color-red); }
+    .hero__book:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 12px 36px rgba(0,0,0,.22); }
+    .hero__book-label { font-family: var(--font-ui); font-weight: 600; font-size: 22px; color: var(--purple); white-space: nowrap; }
+    .hero__book-icons { display: flex; align-items: center; gap: 8px; }
+    .hero__book-icons img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; transition: transform .25s var(--ease-out); }
+    .hero__book-icons img:hover { transform: scale(1.18) rotate(-6deg); }
+    @keyframes heroUp { from { opacity:0; transform:translateY(28px) } to { opacity:1; transform:translateY(0) } }
 
-    /* ========== WHY CHOOSE US ========== */
-    .why {
-      padding: 80px 40px 20px;
-      text-align: center;
+    /* ─── WHY CHOOSE US ───────────────────────────── */
+    .why { padding: 80px 20px; text-align: center; }
+    .why__title { font-family: var(--font-heading); font-size: clamp(34px,5vw,82px); color: var(--purple); margin-bottom: 56px; }
+    .why__grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; max-width: 1380px; margin: 0 auto; }
+    .why__card {
+      background: var(--yellow); border-radius: var(--r-card);
+      padding: 36px 20px 44px; display: flex; flex-direction: column; align-items: center; gap: 16px;
+      transition: transform .35s var(--ease-out), box-shadow .35s var(--ease-out);
     }
-    .why__title {
-      font-family: var(--font-anton);
-      font-size: clamp(28px, 4.5vw, 78px);
-      color: var(--color-purple);
-      margin-bottom: 54px;
-    }
-    .why__grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 24px;
-      max-width: var(--max-content);
-      margin-inline: auto;
-    }
-    .why-card {
-      background: var(--color-yellow);
-      border-radius: var(--radius-card);
-      padding: 32px 24px 28px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      min-height: 360px;
-    }
-    .why-card__title {
-      font-family: var(--font-anton);
-      font-size: clamp(14px, 1.5vw, 28px);
-      color: var(--color-purple);
-      margin-bottom: 10px;
-      letter-spacing: 0.02em;
-    }
-    .why-card__desc {
-      font-family: var(--font-glora);
-      font-size: clamp(12px, 1.1vw, 20px);
-      color: var(--color-purple);
-      line-height: 1.45;
-      margin-bottom: 28px;
-    }
-    .why-card__icon {
-      margin-top: auto;
-      width: 56%;
-      max-width: 200px;
-      object-fit: contain;
-    }
-    .why-card__icon--tall { max-width: 160px; }
+    .why__card:hover { transform: translateY(-10px); box-shadow: 0 20px 52px rgba(83,51,82,.18); }
+    .why__card-img { width: 100%; max-width: 260px; height: 220px; object-fit: contain; transition: transform .4s var(--ease-out); }
+    .why__card:hover .why__card-img { transform: scale(1.06); }
+    .why__card-title { font-family: var(--font-heading); font-size: clamp(18px,1.8vw,32px); color: var(--purple); text-align: center; }
+    .why__card-desc { font-size: clamp(14px,1.2vw,22px); color: var(--purple); text-align: center; line-height: 1.45; }
 
-    /* ========== GALLERY ========== */
-    .gallery-section {
-      margin: 60px 24px 0;
-      background: var(--color-yellow-light);
-      border-radius: 30px;
-      padding: 56px 52px 60px;
+    /* ─── GALLERY ─────────────────────────────────── */
+    .gallery { background: var(--purple); padding: 80px 20px; text-align: center; }
+    .gallery__title { font-family: var(--font-heading); font-size: clamp(52px,7vw,82px); color: var(--yellow); margin-bottom: 10px; }
+    .gallery__sub { font-size: clamp(18px,2vw,36px); color: var(--yellow); margin-bottom: 60px; }
+    .gallery__grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; max-width: 1380px; margin: 0 auto; }
+    .gallery__item {
+      position: relative; border-radius: var(--r-card); overflow: hidden; aspect-ratio: 2/3; cursor: zoom-in;
+      transition: transform .45s var(--ease-out), box-shadow .45s var(--ease-out);
     }
-    .gallery-section__title {
-      font-family: var(--font-anton);
-      font-size: clamp(32px, 4vw, 74px);
-      color: var(--color-purple);
-      margin-bottom: 6px;
-    }
-    .gallery-section__subtitle {
-      font-family: var(--font-glora);
-      font-size: clamp(14px, 1.8vw, 32px);
-      color: var(--color-purple);
-      margin-bottom: 40px;
-    }
-    .gallery__grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
-    }
-    .gallery-card {
-      position: relative;
-      border-radius: var(--radius-card);
-      overflow: hidden;
-      aspect-ratio: 0.72;
-    }
-    .gallery-card__img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .gallery-card__overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, rgba(0,0,0,0) 55%, rgba(0,0,0,0.82) 100%);
-    }
-    .gallery-card__caption {
-      position: absolute;
-      bottom: 16px;
-      left: 0;
-      right: 0;
-      padding: 0 14px;
-      font-family: var(--font-glora);
-      font-size: clamp(10px, 0.9vw, 17px);
-      color: var(--color-yellow);
-      text-align: center;
-      line-height: 1.4;
-    }
+    .gallery__item:hover { transform: scale(1.07); box-shadow: 0 22px 60px rgba(0,0,0,.5); z-index: 4; }
+    .gallery__item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .55s var(--ease-out); }
+    .gallery__item:hover img { transform: scale(1.09); }
+    .gallery__veil { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(0,0,0,0) 46%, rgba(0,0,0,.82) 100%); }
+    .gallery__caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 18px 14px 16px; font-size: clamp(11px,.9vw,18px); color: var(--yellow); line-height: 1.35; text-align: center; }
 
-    /* ========== FOOTER ========== */
-    .footer {
-      margin-top: 80px;
-      padding: 32px 40px;
-      text-align: center;
-      font-family: var(--font-glora);
-      font-size: 14px;
-      color: rgba(83,51,82,0.55);
-      border-top: 1px solid rgba(83,51,82,0.1);
-    }
+    /* ─── HOW IT WORKS ────────────────────────────── */
+    .how { padding: 80px 20px; }
+    .how__box { background: var(--yellow); border-radius: var(--r-section); padding: 72px 40px 80px; max-width: 1380px; margin: 0 auto; text-align: center; }
+    .how__title { font-family: var(--font-heading); font-size: clamp(40px,6vw,89px); color: var(--purple); margin-bottom: 52px; }
+    .how__list { list-style: decimal; display: inline-flex; flex-direction: column; gap: 18px; text-align: left; padding-left: 52px; }
+    .how__list li { font-size: clamp(20px,2.4vw,46px); color: var(--purple); line-height: 1.3; transition: transform .25s var(--ease-out); }
+    .how__list li:hover { transform: translateX(10px); }
 
-    /* ========== RESPONSIVE: TABLET ========== */
+    /* ─── CONTACTS ────────────────────────────────── */
+    .contacts { background: var(--purple); padding: 80px 20px; text-align: center; }
+    .contacts__title { font-family: var(--font-heading); font-size: clamp(52px,7vw,89px); color: var(--yellow); margin-bottom: 52px; }
+    .contacts__lines { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .contacts__line { font-size: clamp(18px,2vw,40px); color: var(--yellow); line-height: 1.45; }
+    .contacts__line a { color: var(--yellow); transition: opacity .25s; }
+    .contacts__line a:hover { opacity: .65; }
+
+    /* ─── FOOTER ──────────────────────────────────── */
+    .footer-wave { display: block; line-height: 0; background: var(--purple); }
+    .footer-wave svg { display: block; width: 100%; }
+
+    footer { background: var(--near-black); color: rgba(255,255,255,.5); }
+    .footer__inner {
+      max-width: 1380px; margin: 0 auto; padding: 64px 28px 48px;
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 56px;
+      border-bottom: 1px solid rgba(255,255,255,.09);
+    }
+    .footer__brand-name { font-family: var(--font-heading); font-size: 36px; color: var(--yellow); margin-bottom: 14px; letter-spacing: .04em; }
+    .footer__brand-tag { font-size: 15px; line-height: 1.65; color: rgba(255,255,255,.45); }
+    .footer__col h4 { font-family: var(--font-nav); font-weight: 700; font-size: 12px; letter-spacing: .13em; text-transform: uppercase; color: rgba(255,255,255,.32); margin-bottom: 20px; }
+    .footer__col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer__col ul a { font-size: 16px; color: rgba(255,255,255,.5); transition: color .25s, padding-left .25s var(--ease-out); }
+    .footer__col ul a:hover { color: var(--yellow); padding-left: 6px; }
+    .footer__soc-wrap { display: flex; flex-wrap: wrap; gap: 10px; }
+    .footer__soc {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.11);
+      border-radius: 8px; padding: 9px 16px; font-size: 14px;
+      color: rgba(255,255,255,.6); text-decoration: none;
+      transition: background .25s, color .25s, border-color .25s, transform .25s var(--ease-out);
+    }
+    .footer__soc:hover { background: rgba(255,198,94,.14); border-color: var(--yellow); color: var(--yellow); transform: translateY(-3px); }
+    .footer__bottom { max-width: 1380px; margin: 0 auto; padding: 22px 28px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: rgba(255,255,255,.24); flex-wrap: wrap; gap: 8px; }
+
+    /* ─── FAB + SCROLL TOP ────────────────────────── */
+    .fab {
+      position: fixed; bottom: 30px; right: 30px; z-index: 400;
+      background: var(--yellow); color: var(--purple);
+      font-family: var(--font-nav); font-weight: 700; font-size: 15px;
+      border: none; border-radius: 50px; padding: 15px 26px; cursor: pointer;
+      box-shadow: 0 8px 32px rgba(255,198,94,.55);
+      text-decoration: none;
+      transition: transform .3s var(--ease-out), box-shadow .3s var(--ease-out);
+      animation: fabIn .7s 1.8s both var(--ease-out);
+    }
+    .fab:hover { transform: translateY(-5px) scale(1.04); box-shadow: 0 18px 50px rgba(255,198,94,.7); }
+    @keyframes fabIn { from { opacity:0; transform:scale(.7) translateY(18px) } to { opacity:1; transform:scale(1) translateY(0) } }
+
+    #scroll-top {
+      position: fixed; bottom: 30px; left: 30px; z-index: 400;
+      width: 46px; height: 46px; border-radius: 50%;
+      background: var(--purple); color: var(--white);
+      border: none; font-size: 20px; cursor: pointer;
+      box-shadow: 0 6px 24px rgba(83,51,82,.35);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .35s, transform .3s var(--ease-out);
+    }
+    #scroll-top.show { opacity: 1; pointer-events: auto; }
+    #scroll-top:hover { transform: translateY(-3px); }
+
+    /* ─── RESPONSIVE ──────────────────────────────── */
     @media (max-width: 1024px) {
-      .header { padding: 12px 24px; }
-
-      /* Hide desktop nav, show hamburger */
-      .nav__menu {
-        display: none;
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 280px;
-        background: var(--color-white);
-        box-shadow: -4px 0 24px rgba(83,51,82,0.15);
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
-        padding: 48px 32px;
-        z-index: 105;
-        transition: transform 0.32s cubic-bezier(0.4,0,0.2,1);
-        transform: translateX(100%);
-      }
-      .nav__menu.is-open {
-        display: flex;
-        transform: translateX(0);
-      }
-      .nav__list {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
-        width: 100%;
-      }
-      .nav__item + .nav__item::before { display: none; }
-      .nav__link {
-        font-size: 26px;
-        padding: 10px 0;
-        width: 100%;
-      }
-      .nav__hamburger { display: flex; }
-
-      .why__grid { grid-template-columns: repeat(2, 1fr); }
-
-      .gallery__grid { grid-template-columns: repeat(2, 1fr); }
-      .gallery-card { aspect-ratio: 0.8; }
-
-      .hero__title { font-size: clamp(28px, 5vw, 56px); }
+      .nav__links, .nav__sep { display: none; }
+      .nav__burger { display: flex; }
+      .why__grid { grid-template-columns: repeat(2,1fr); }
+      .gallery__grid { grid-template-columns: repeat(2,1fr); }
+      .footer__inner { grid-template-columns: 1fr 1fr; }
+      .footer__brand { grid-column: span 2; }
     }
-
-    /* ========== RESPONSIVE: MOBILE ========== */
     @media (max-width: 768px) {
-      .header { padding: 10px 16px; }
-      .header__logo-emblem { width: 48px; height: 48px; }
-      .header__logo-text { font-size: 15px; }
-
-      .hero {
-        width: calc(100% - 24px);
-        margin-top: 16px;
-        border-radius: 18px;
-        min-height: 380px;
-      }
-      .hero__content {
-        padding: 52px 20px 48px;
-        min-height: 380px;
-      }
-      .hero__title  { font-size: clamp(26px, 7vw, 40px); margin-bottom: 14px; }
-      .hero__subtitle { font-size: clamp(13px, 4vw, 18px); margin-bottom: 30px; }
-      .hero__cta { gap: 14px; }
-      .btn { font-size: 15px; padding: 12px 22px; }
-
-      .why { padding: 52px 16px 16px; }
-      .why__title { font-size: clamp(24px, 7vw, 40px); margin-bottom: 32px; }
-      .why__grid { grid-template-columns: 1fr 1fr; gap: 14px; }
-      .why-card { padding: 20px 14px 18px; min-height: 240px; }
-
-      .gallery-section { margin: 32px 12px 0; padding: 32px 20px 36px; border-radius: 18px; }
-      .gallery-section__title { font-size: clamp(28px, 8vw, 42px); }
-      .gallery__grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-      .gallery-card { aspect-ratio: 0.75; }
-
-      .footer { margin-top: 48px; padding: 24px 16px; }
+      :root { --nav-h: 70px; }
+      .hero__wrap { min-height: 420px; }
+      .hero__body { padding: 72px 16px 56px; }
+      .why__grid { grid-template-columns: 1fr; }
+      .gallery__grid { grid-template-columns: 1fr; }
+      .how__box { padding: 52px 20px 60px; }
+      .how__list { padding-left: 32px; }
+      .footer__inner { grid-template-columns: 1fr; padding: 48px 20px 40px; gap: 36px; }
+      .footer__brand { grid-column: span 1; }
+      .footer__bottom { padding: 18px 20px; }
+      .fab { bottom: 18px; right: 18px; padding: 13px 20px; font-size: 13px; }
+      #scroll-top { bottom: 18px; left: 18px; width: 40px; height: 40px; }
     }
-
-    /* Overlay backdrop for mobile nav */
-    .nav__backdrop {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(83,51,82,0.35);
-      z-index: 100;
-    }
-    .nav__backdrop.is-open { display: block; }
   </style>
 </head>
 <body>
 
-  <!-- ===== HEADER ===== -->
-  <header class="header" role="banner">
-    <a href="#" class="header__logo" aria-label="Kyrgyz View – Home">
-      <div class="header__logo-emblem">
-        <!-- Circular emblem composed of layered Figma assets -->
-        <img
-          src="https://www.figma.com/api/mcp/asset/75e06dca-b437-45e1-a3e1-7b0477d9d4e6"
-          alt="Kyrgyz View circular emblem"
-          width="68" height="68"
-          style="border-radius:50%; object-fit:cover;"
-        />
-      </div>
-      <span class="header__logo-text">KYRGYZ<br>VIEW</span>
-    </a>
+<!-- LOADER -->
+<div id="loader" aria-hidden="true">
+  <div class="ld-logo">KYRGYZ VIEW</div>
+  <div class="ld-bar"><div class="ld-fill"></div></div>
+</div>
 
-    <!-- Desktop navigation -->
-    <nav class="nav" aria-label="Main navigation">
-      <button
-        class="nav__hamburger"
-        id="hamburger"
-        aria-expanded="false"
-        aria-controls="nav-menu"
-        aria-label="Toggle navigation menu"
-      >
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+<!-- CURSOR -->
+<div id="cdot" aria-hidden="true"></div>
 
-      <div class="nav__backdrop" id="nav-backdrop"></div>
+<!-- ── NAVBAR ────────────────────────────────────────────── -->
+<nav class="nav" id="navbar" aria-label="Main navigation">
+  <a href="#hero" class="nav__logo" aria-label="KyrgyzView home">
+    <img
+      src="https://www.figma.com/api/mcp/asset/38a289d8-407f-4493-ba86-f5d7c004f404"
+      alt="KyrgyzView logo"
+      width="72" height="72"
+    />
+  </a>
 
-      <div class="nav__menu" id="nav-menu" role="dialog" aria-modal="true" aria-label="Navigation menu">
-        <ul class="nav__list">
-          <li class="nav__item"><a href="#" class="nav__link">MAIN</a></li>
-          <li class="nav__item"><a href="#about" class="nav__link">ABOUT US</a></li>
-          <li class="nav__item"><a href="#tours" class="nav__link">TOURS</a></li>
-        </ul>
-      </div>
-    </nav>
-  </header>
+  <ul class="nav__links" aria-label="Desktop navigation">
+    <li><a href="#hero">MAIN</a></li>
+    <li class="nav__sep" aria-hidden="true"></li>
+    <li><a href="#why">ABOUT US</a></li>
+    <li class="nav__sep" aria-hidden="true"></li>
+    <li><a href="#gallery">TOURS</a></li>
+  </ul>
 
-  <!-- ===== MAIN ===== -->
-  <main>
+  <button class="nav__burger" id="burger" aria-expanded="false" aria-controls="mob-menu" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
 
-    <!-- HERO -->
-    <section class="hero" aria-label="Hero banner">
+<ul class="nav__mob" id="mob-menu" role="menu" aria-label="Mobile navigation">
+  <li role="menuitem"><a href="#hero"     class="mob-link">MAIN</a></li>
+  <li role="menuitem"><a href="#why"      class="mob-link">ABOUT US</a></li>
+  <li role="menuitem"><a href="#gallery"  class="mob-link">GALLERY</a></li>
+  <li role="menuitem"><a href="#how"      class="mob-link">HOW IT WORKS</a></li>
+  <li role="menuitem"><a href="#contacts" class="mob-link">CONTACTS</a></li>
+</ul>
+
+<!-- ── MAIN CONTENT ──────────────────────────────────────── -->
+<main>
+
+  <!-- HERO -->
+  <section class="hero" id="hero" aria-label="Hero — Discover Kyrgyzstan">
+    <div class="hero__wrap">
       <img
-        class="hero__bg"
-        src="https://www.figma.com/api/mcp/asset/bf9c0caa-0972-4426-9dd6-98b824c21189"
-        alt="Beautiful mountain landscape of Kyrgyzstan with clouds"
+        id="hero-bg" class="hero__bg"
+        src="https://www.figma.com/api/mcp/asset/62ca0db4-e279-4ad7-8689-e0cea494cbda"
+        alt="Scenic Kyrgyzstan mountain landscape"
+        width="1800" height="900" loading="eager"
       />
-      <div class="hero__overlay" aria-hidden="true"></div>
-      <div class="hero__content">
+      <div class="hero__veil" aria-hidden="true"></div>
+      <div class="hero__body">
         <h1 class="hero__title">Discover the Beauty of Kyrgyzstan!</h1>
-        <p class="hero__subtitle">
+        <p class="hero__sub">
           Tour Guide in Kyrgyzstan 🇰🇬<br>
           Mountains. Lakes. Nomads. Adventures.<br>
           Private tours &amp; hidden gems with a local guide.
         </p>
-        <div class="hero__cta">
-          <a href="https://wa.me/" target="_blank" rel="noopener" class="btn btn--whatsapp">Book via WhatsApp</a>
-          <a href="https://instagram.com/" target="_blank" rel="noopener" class="btn btn--instagram">Book via Instagram</a>
-        </div>
+        <a href="#contacts" class="hero__book" aria-label="Book via WhatsApp, Facebook or Instagram">
+          <span class="hero__book-label">Book via</span>
+          <div class="hero__book-icons">
+            <img src="https://www.figma.com/api/mcp/asset/83e6a5c7-b9f6-41fb-9d59-185502a220f5" alt="WhatsApp"  width="44" height="44" />
+            <img src="https://www.figma.com/api/mcp/asset/567a58c7-0b68-49b2-a8d5-7e246859af59" alt="Facebook"  width="44" height="44" />
+            <img src="https://www.figma.com/api/mcp/asset/d03cd3a5-355a-47ff-b766-2fed1b278a1d" alt="Instagram" width="44" height="44" />
+          </div>
+        </a>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- WHY CHOOSE US -->
-    <section class="why" id="about" aria-labelledby="why-title">
-      <h2 class="why__title" id="why-title">WHY PEOPLE CHOOSE US?</h2>
-      <div class="why__grid">
+  <!-- WHY CHOOSE US -->
+  <section class="why" id="why" aria-labelledby="why-h">
+    <h2 class="why__title sr" id="why-h">WHY PEOPLE CHOOSE US?</h2>
+    <div class="why__grid">
 
-        <article class="why-card">
-          <h3 class="why-card__title">English-Speaking Guides</h3>
-          <p class="why-card__desc">Easy communication for international travelers</p>
-          <img
-            class="why-card__icon why-card__icon--tall"
-            src="https://www.figma.com/api/mcp/asset/31eb772c-4219-4e2a-b08e-98cffdbf44c3"
-            alt="Illustration of a person with a speech bubble saying ENGLISH"
-          />
-        </article>
+      <article class="why__card sr" style="transition-delay:.05s">
+        <img class="why__card-img"
+          src="https://www.figma.com/api/mcp/asset/ee50c7ef-ee73-4fac-bb7c-b1f3223080d2"
+          alt="English-speaking guide" width="260" height="220" />
+        <h3 class="why__card-title">English-Speaking Guides</h3>
+        <p class="why__card-desc">Easy communication for international travelers</p>
+      </article>
 
-        <article class="why-card">
-          <h3 class="why-card__title">Custom Tours</h3>
-          <p class="why-card__desc">We create trips based on your needs</p>
-          <img
-            class="why-card__icon"
-            src="https://www.figma.com/api/mcp/asset/53067bb4-2da6-408e-ab5c-e1b1cd66e839"
-            alt="Illustration of a custom route map"
-          />
-        </article>
+      <article class="why__card sr" style="transition-delay:.15s">
+        <img class="why__card-img"
+          src="https://www.figma.com/api/mcp/asset/5cbb88e1-377b-417c-8f3d-a8bca84254ec"
+          alt="Custom tours map" width="260" height="220" />
+        <h3 class="why__card-title">Custom Tours</h3>
+        <p class="why__card-desc">We create trips based on your needs</p>
+      </article>
 
-        <article class="why-card">
-          <h3 class="why-card__title">Local Guides</h3>
-          <p class="why-card__desc">We know every hidden place</p>
-          <img
-            class="why-card__icon"
-            src="https://www.figma.com/api/mcp/asset/7bbab1f9-53d2-46a1-8f32-4220e900e476"
-            alt="Illustration of a local guide with a hat"
-          />
-        </article>
+      <article class="why__card sr" style="transition-delay:.25s">
+        <img class="why__card-img"
+          src="https://www.figma.com/api/mcp/asset/d6ee725e-8ae4-4296-ac02-4a31b6bbd4f8"
+          alt="Local guide" width="260" height="220" />
+        <h3 class="why__card-title">Local Guides</h3>
+        <p class="why__card-desc">We know every hidden place</p>
+      </article>
 
-        <article class="why-card">
-          <h3 class="why-card__title">Safe &amp; Reliable</h3>
-          <p class="why-card__desc">Experienced team and trusted routes</p>
-          <img
-            class="why-card__icon"
-            src="https://www.figma.com/api/mcp/asset/85e5b795-4a1b-4cca-856b-c551f651e5cb"
-            alt="Illustration of a shield with a checkmark representing safety"
-          />
-        </article>
+      <article class="why__card sr" style="transition-delay:.35s">
+        <img class="why__card-img"
+          src="https://www.figma.com/api/mcp/asset/e578ac35-504f-450a-91d8-1f6b1d8565e0"
+          alt="Safe and reliable" width="260" height="220" />
+        <h3 class="why__card-title">Safe &amp; Reliable</h3>
+        <p class="why__card-desc">Experienced team and trusted routes</p>
+      </article>
 
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery" id="gallery" aria-labelledby="gallery-h">
+    <h2 class="gallery__title sr" id="gallery-h">GALLERY</h2>
+    <p class="gallery__sub sr" style="transition-delay:.1s">Our recent travels</p>
+    <div class="gallery__grid">
+
+      <figure class="gallery__item sr" style="transition-delay:.05s">
+        <img src="https://www.figma.com/api/mcp/asset/19a15b25-28a7-4b94-85e6-629338b633d6"
+          alt="Exploring Ala-Archa and Chunkurchak with Saif from Saudi Arabia"
+          width="400" height="600" loading="lazy" />
+        <div class="gallery__veil" aria-hidden="true"></div>
+        <figcaption class="gallery__caption">Exploring Ala-Archa and Chunkurchak with Saif from Saudi Arabia! 🏔️❄️</figcaption>
+      </figure>
+
+      <figure class="gallery__item sr" style="transition-delay:.15s">
+        <img src="https://www.figma.com/api/mcp/asset/4296f392-3d62-4b8c-beb6-73314c8abe30"
+          alt="Discover the Beauty of Kyrgyzstan on Horseback"
+          width="400" height="600" loading="lazy" />
+        <div class="gallery__veil" aria-hidden="true"></div>
+        <figcaption class="gallery__caption">✨ Discover the Beauty of Kyrgyzstan on Horseback!</figcaption>
+      </figure>
+
+      <figure class="gallery__item sr" style="transition-delay:.25s">
+        <img src="https://www.figma.com/api/mcp/asset/f2766f71-3652-4ec0-8586-9f8528a6bf79"
+          alt="Petroglyphs of Cholpon-Ata — Open-Air History"
+          width="400" height="600" loading="lazy" />
+        <div class="gallery__veil" aria-hidden="true"></div>
+        <figcaption class="gallery__caption">🪨 Petroglyphs of Cholpon-Ata — Open-Air History</figcaption>
+      </figure>
+
+      <figure class="gallery__item sr" style="transition-delay:.35s">
+        <img src="https://www.figma.com/api/mcp/asset/d413e747-2e5c-45e9-8a34-709e4a97677d"
+          alt="Köl-Suu: The Hidden Sanctuary of the Tien Shan"
+          width="400" height="600" loading="lazy" />
+        <div class="gallery__veil" aria-hidden="true"></div>
+        <figcaption class="gallery__caption">Köl-Suu: The Hidden Sanctuary of the Tien Shan 🏔️💎</figcaption>
+      </figure>
+
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how" aria-labelledby="how-h">
+    <div class="how__box">
+      <h2 class="how__title sr" id="how-h">HOW IT WORKS</h2>
+      <ol class="how__list" aria-label="Steps to book a tour">
+        <li class="sr" style="transition-delay:.08s">You contact us</li>
+        <li class="sr" style="transition-delay:.18s">We suggest the best tour</li>
+        <li class="sr" style="transition-delay:.28s">We finalize the details</li>
+        <li class="sr" style="transition-delay:.38s">You enjoy your trip</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- CONTACTS -->
+  <section class="contacts" id="contacts" aria-labelledby="contacts-h">
+    <h2 class="contacts__title sr" id="contacts-h">CONTACTS</h2>
+    <address class="contacts__lines" style="font-style:normal">
+      <p class="contacts__line sr" style="transition-delay:.06s"><a href="tel:+996000000000">Phone: +996 XXX XXX XXX</a></p>
+      <p class="contacts__line sr" style="transition-delay:.13s">WhatsApp: same number</p>
+      <p class="contacts__line sr" style="transition-delay:.20s"><a href="https://instagram.com/kyrgyz_view" target="_blank" rel="noopener">Instagram: @kyrgyz_view</a></p>
+      <p class="contacts__line sr" style="transition-delay:.27s"><a href="mailto:kyrgyzview@gmail.com">Email: kyrgyzview@gmail.com</a></p>
+      <p class="contacts__line sr" style="transition-delay:.34s">Location: Bishkek, Kyrgyzstan</p>
+    </address>
+  </section>
+
+</main>
+
+<!-- FOOTER WAVE TRANSITION -->
+<div class="footer-wave" aria-hidden="true">
+  <svg viewBox="0 0 1440 72" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,72 L0,48 L72,22 L160,50 L280,8 L390,36 L510,4 L615,30 L730,16 L850,42 L940,10 L1050,38 L1165,20 L1295,46 L1440,18 L1440,72 Z" fill="#1a0a19"/>
+  </svg>
+</div>
+
+<!-- ── FOOTER ─────────────────────────────────────────────── -->
+<footer aria-label="Site footer">
+  <div class="footer__inner">
+
+    <div class="footer__brand sr">
+      <div class="footer__brand-name">KYRGYZ VIEW</div>
+      <p class="footer__brand-tag">
+        Authentic travel experiences in the heart of Central Asia.<br>
+        Mountains. Lakes. Nomads. Memories that last forever.
+      </p>
+    </div>
+
+    <nav class="footer__col sr" style="transition-delay:.1s" aria-label="Footer navigation">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="#hero">Main</a></li>
+        <li><a href="#why">About Us</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#contacts">Contacts</a></li>
+      </ul>
+    </nav>
+
+    <div class="footer__col sr" style="transition-delay:.2s">
+      <h4>Follow Us</h4>
+      <div class="footer__soc-wrap">
+        <a href="https://instagram.com/kyrgyz_view" target="_blank" rel="noopener" class="footer__soc">📸 Instagram</a>
+        <a href="#contacts" class="footer__soc">💬 WhatsApp</a>
+        <a href="mailto:kyrgyzview@gmail.com" class="footer__soc">✉️ Email</a>
       </div>
-    </section>
+    </div>
 
-    <!-- GALLERY -->
-    <section class="gallery-section" id="tours" aria-labelledby="gallery-title">
-      <h2 class="gallery-section__title" id="gallery-title">GALLERY</h2>
-      <p class="gallery-section__subtitle">Our recent travels</p>
+  </div>
+  <div class="footer__bottom">
+    <span>© 2025 KyrgyzView. All rights reserved.</span>
+    <span>Made with ❤️ in Bishkek, Kyrgyzstan 🇰🇬</span>
+  </div>
+</footer>
 
-      <div class="gallery__grid">
+<!-- FAB + SCROLL-TO-TOP -->
+<a href="#contacts" class="fab" aria-label="Book a tour">Book a Tour 🏔️</a>
+<button id="scroll-top" aria-label="Scroll to top">↑</button>
 
-        <article class="gallery-card">
-          <img
-            class="gallery-card__img"
-            src="https://www.figma.com/api/mcp/asset/a522ad49-f4b7-44ee-a5af-936fa97bbaec"
-            alt="Guide and traveler at Ala-Archa winter landscape with snow-capped mountains"
-          />
-          <div class="gallery-card__overlay" aria-hidden="true"></div>
-          <p class="gallery-card__caption">Exploring Ala-Archa and Chunkurchak with Saif from Saudi Arabia! 🏔️❄️</p>
-        </article>
+<!-- ── SCRIPTS ────────────────────────────────────────────── -->
+<script>
+  /* Loader */
+  window.addEventListener('load', () => {
+    setTimeout(() => document.getElementById('loader').classList.add('done'), 1500);
+  });
 
-        <article class="gallery-card">
-          <img
-            class="gallery-card__img"
-            src="https://www.figma.com/api/mcp/asset/744301ca-ff69-437e-b996-1adc2b4f7fe5"
-            alt="Horseback riding through the Kyrgyzstan countryside in winter"
-          />
-          <div class="gallery-card__overlay" aria-hidden="true"></div>
-          <p class="gallery-card__caption">✨ Discover the Beauty of Kyrgyzstan on Horseback!</p>
-        </article>
+  /* Navbar shadow on scroll */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', scrollY > 40), { passive: true });
 
-        <article class="gallery-card">
-          <img
-            class="gallery-card__img"
-            src="https://www.figma.com/api/mcp/asset/69d3a7aa-fa3f-4700-8186-4737ccc97de8"
-            alt="Ancient petroglyphs carved into stone at Cholpon-Ata open-air museum"
-          />
-          <div class="gallery-card__overlay" aria-hidden="true"></div>
-          <p class="gallery-card__caption">🪨 Petroglyphs of Cholpon-Ata — Open-Air History</p>
-        </article>
+  /* Hamburger toggle */
+  const burger  = document.getElementById('burger');
+  const mobMenu = document.getElementById('mob-menu');
+  burger.addEventListener('click', () => {
+    const open = burger.getAttribute('aria-expanded') === 'true';
+    burger.setAttribute('aria-expanded', String(!open));
+    mobMenu.classList.toggle('open', !open);
+  });
+  document.querySelectorAll('.mob-link').forEach(l => l.addEventListener('click', () => {
+    burger.setAttribute('aria-expanded', 'false');
+    mobMenu.classList.remove('open');
+  }));
 
-        <article class="gallery-card">
-          <img
-            class="gallery-card__img"
-            src="https://www.figma.com/api/mcp/asset/6c9c3200-bf46-4f33-9e25-098b1275180f"
-            alt="Crystal clear turquoise water of Köl-Suu lake surrounded by dramatic cliffs"
-          />
-          <div class="gallery-card__overlay" aria-hidden="true"></div>
-          <p class="gallery-card__caption">Köl-Suu: The Hidden Sanctuary of the Tien Shan 🏔️💎</p>
-        </article>
+  /* Scroll reveal */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1, rootMargin: '0px 0px -36px 0px' });
+  document.querySelectorAll('.sr').forEach(el => io.observe(el));
 
-      </div>
-    </section>
+  /* Hero BG scale on load */
+  const heroBg = document.getElementById('hero-bg');
+  const ready  = () => heroBg.classList.add('ready');
+  heroBg.complete ? ready() : heroBg.addEventListener('load', ready);
 
-  </main>
+  /* Parallax */
+  window.addEventListener('scroll', () => {
+    heroBg.style.transform = `scale(1) translateY(${scrollY * 0.28}px)`;
+  }, { passive: true });
 
-  <!-- ===== FOOTER ===== -->
-  <footer class="footer" role="contentinfo">
-    <p>&copy; 2025 Kyrgyz View. All rights reserved. | Tour Guide in Kyrgyzstan</p>
-  </footer>
+  /* Scroll-to-top */
+  const stBtn = document.getElementById('scroll-top');
+  window.addEventListener('scroll', () => stBtn.classList.toggle('show', scrollY > 420), { passive: true });
+  stBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-  <!-- ===== SCRIPT ===== -->
-  <script>
-    (function () {
-      const hamburger = document.getElementById('hamburger');
-      const menu      = document.getElementById('nav-menu');
-      const backdrop  = document.getElementById('nav-backdrop');
-
-      function openMenu() {
-        menu.classList.add('is-open');
-        backdrop.classList.add('is-open');
-        hamburger.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = 'hidden';
-      }
-
-      function closeMenu() {
-        menu.classList.remove('is-open');
-        backdrop.classList.remove('is-open');
-        hamburger.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-      }
-
-      hamburger.addEventListener('click', function () {
-        const isOpen = hamburger.getAttribute('aria-expanded') === 'true';
-        isOpen ? closeMenu() : openMenu();
-      });
-
-      backdrop.addEventListener('click', closeMenu);
-
-      menu.querySelectorAll('.nav__link').forEach(function (link) {
-        link.addEventListener('click', closeMenu);
-      });
-
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') closeMenu();
-      });
+  /* Cursor dot — desktop only */
+  const dot = document.getElementById('cdot');
+  if (window.matchMedia('(pointer:fine)').matches) {
+    let cx = 0, cy = 0, tx = 0, ty = 0;
+    document.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
+    (function loop() {
+      cx += (tx - cx) * .16;
+      cy += (ty - cy) * .16;
+      dot.style.left = cx + 'px';
+      dot.style.top  = cy + 'px';
+      requestAnimationFrame(loop);
     })();
-  </script>
-
+  } else {
+    dot.style.display = 'none';
+  }
+</script>
 </body>
 </html>
