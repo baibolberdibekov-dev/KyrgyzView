@@ -1,2 +1,2 @@
 #KyrgyzView
-https://baibolberdibekov-dev.github.io/KyrgyzView/
+kyrgyzview.com
