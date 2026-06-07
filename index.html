@@ -1042,6 +1042,94 @@
       .hero__title { font-size: 38px; }
       .s-head__title { font-size: 30px; }
     }
+    /* --- Styles for the new gallery carousel --- */
+.n-carousel {
+  position: relative;
+}
+.n-carousel__content {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  list-style: none;
+  padding: 0;
+  gap: 16px;
+  border-radius: var(--r-card);
+}
+.n-carousel__content li {
+  scroll-snap-align: start;
+  flex: 0 0 100%;
+  position: relative;
+}
+.n-carousel__content img {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  border-radius: var(--r-card);
+  display: block;
+}
+.n-carousel__previous, .n-carousel__next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+}
+.n-carousel__previous { left: 16px; }
+.n-carousel__next { right: 16px; }
+.n-carousel__previous button, .n-carousel__next button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+.n-carousel__index {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+.n-carousel__index button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(0,0,0,0.3);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.n-carousel__index button.n-carousel__index--active {
+  background-color: var(--c-gold);
+}
+.gallery-caption {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  padding: 8px 15px;
+  border-radius: 30px;
+  font-size: 14px;
+  backdrop-filter: blur(5px);
+}
+@media (max-width: 640px) {
+  .n-carousel__content img {
+    height: 300px;
+  }
+  .gallery-caption {
+    font-size: 10px;
+    bottom: 10px;
+    left: 10px;
+  }
+}
   </style>
 </head>
 <body>
@@ -1172,36 +1260,20 @@
     <h2 class="s-head__title s-head__title--light" id="gal-h">Real <em>Adventures,</em><br>Real Memories</h2>
     <p class="s-head__sub s-head__sub--light">A glimpse of what awaits you in Kyrgyzstan.</p>
   </div>
-  <div class="gallery__grid" role="list">
-    <article class="gallery__item" data-reveal="scale" data-delay="1" role="listitem">
-      <img src="images/gallery1.jpg" alt="Ala-Archa and Chunkurchak expedition"/>
-      <div class="gallery__item__veil">
-        <span class="gallery__item__tag">Mountains</span>
-        <p class="gallery__item__cap">Exploring Ala-Archa & Chunkurchak with Saif from Saudi Arabia 🏔️</p>
-      </div>
-    </article>
-    <article class="gallery__item" data-reveal="scale" data-delay="2" role="listitem">
-      <img src="images/gallery2.jpg" alt="Horseback ride through Kyrgyzstan"/>
-      <div class="gallery__item__veil">
-        <span class="gallery__item__tag">Horseback</span>
-        <p class="gallery__item__cap">Discover Kyrgyzstan on Horseback ✨</p>
-      </div>
-    </article>
-    <article class="gallery__item" data-reveal="scale" data-delay="3" role="listitem">
-      <img src="images/gallery3.jpg" alt="Petroglyphs of Cholpon-Ata"/>
-      <div class="gallery__item__veil">
-        <span class="gallery__item__tag">History</span>
-        <p class="gallery__item__cap">Petroglyphs of Cholpon-Ata — Open-Air History 🪨</p>
-      </div>
-    </article>
-    <article class="gallery__item" data-reveal="scale" data-delay="4" role="listitem">
-      <img src="images/gallery4.jpg" alt="Kol-Suu hidden sanctuary"/>
-      <div class="gallery__item__veil">
-        <span class="gallery__item__tag">Hidden Gems</span>
-        <p class="gallery__item__cap">Köl-Suu: The Hidden Sanctuary of the Tien Shan 💎</p>
-      </div>
-    </article>
-  </div>
+<!-- This is the new image carousel -->
+<div class="n-carousel" data-reveal="scale" data-delay="1">
+  <ul class="n-carousel__content" id="myGallery">
+    <li><img src="images/gallery1.jpg" alt="Ala-Archa and Chunkurchak expedition"><p class="gallery-caption">Exploring Ala-Archa & Chunkurchak with Saif from Saudi Arabia 🏔️</p></li>
+    <li><img src="images/gallery2.jpg" alt="Horseback ride through Kyrgyzstan"><p class="gallery-caption">Discover Kyrgyzstan on Horseback ✨</p></li>
+    <li><img src="images/gallery3.jpg" alt="Petroglyphs of Cholpon-Ata"><p class="gallery-caption">Petroglyphs of Cholpon-Ata — Open-Air History 🪨</p></li>
+    <li><img src="images/gallery4.jpg" alt="Kol-Suu hidden sanctuary"><p class="gallery-caption">Köl-Suu: The Hidden Sanctuary of the Tien Shan 💎</p></li>
+    <!-- Add more images here in the future like the example below -->
+    <!-- <li><img src="images/new-image.jpg" alt=""><p class="gallery-caption">Your awesome tour</p></li> -->
+  </ul>
+  <div class="n-carousel__previous"><button><span>◀</span></button></div>
+  <div class="n-carousel__next"><button><span>▶</span></button></div>
+  <div class="n-carousel__index"></div>
+</div>
 </section>
 
 <!-- ═══ TOUR EXPERIENCES ══════════════════════════════════ -->
@@ -1439,6 +1511,12 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/n-carousel/n-carousel.min.css">
+<script src="https://unpkg.com/n-carousel/n-carousel.min.js" type="module"></script>
+  <script type="module">
+  import nCarouselInit from 'https://unpkg.com/n-carousel/n-carousel.min.js';
+  window.nCarouselInit = nCarouselInit;
+</script>
 <script>
   /* ── NAV SCROLL ─────────────────────────────── */
   const nav = document.getElementById('nav');
@@ -1557,6 +1635,12 @@
       }, 900);
     };
   }, 5000);
+</script>
+  <script>
+  // Initialize the gallery carousel when the page loads
+  document.addEventListener('DOMContentLoaded', () => {
+    window.nCarouselInit();
+  });
 </script>
 </body>
 </html>
