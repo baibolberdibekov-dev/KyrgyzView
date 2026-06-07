@@ -1,2 +1,2 @@
 #KyrgyzView
-kyrgyzview.com
+https://kyrgyzview.com
