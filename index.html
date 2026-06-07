@@ -763,8 +763,6 @@
   }, { threshold: .12, rootMargin: '0px 0px -48px 0px' });
 
   els.forEach(el => io.observe(el));
-  /* HERO IMAGE SLIDER */
-
 const heroImages = [
   'images/hero.jpg',
   'images/hero2.jpg',
@@ -776,18 +774,23 @@ const heroImages = [
 let currentHero = 0;
 const heroImg = document.getElementById('heroImage');
 
-heroImg.style.transition = 'opacity 1s ease';
+heroImg.style.transition = 'opacity 2s ease';
 
 setInterval(() => {
-  heroImg.style.opacity = '0';
+  currentHero = (currentHero + 1) % heroImages.length;
 
-  setTimeout(() => {
-    currentHero = (currentHero + 1) % heroImages.length;
-    heroImg.src = heroImages[currentHero];
-    heroImg.style.opacity = '1';
-  }, 1000);
+  const nextImage = new Image();
+  nextImage.src = heroImages[currentHero];
 
-}, 3000);
+  nextImage.onload = () => {
+    heroImg.style.opacity = '0.4';
+
+    setTimeout(() => {
+      heroImg.src = heroImages[currentHero];
+      heroImg.style.opacity = '1';
+    }, 1000);
+  };
+}, 4000);
 </script>
 </body>
 </html>
