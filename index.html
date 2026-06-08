@@ -738,51 +738,88 @@
     }
 
     /* ─── TESTIMONIAL STRIP ──────────────────────────────── */
+    /* ─── REVIEWS CAROUSEL ───────────────────────────────── */
     .review-strip {
-      background: var(--c-cream);
+      background: var(--c-earth);
       padding: clamp(64px, 8vw, 100px) var(--gutter);
+      position: relative; overflow: hidden;
     }
-    .review-strip__inner {
-      max-width: var(--max-w); margin: 0 auto;
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    .review-strip::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 100%, rgba(212,168,67,.06) 0%, transparent 65%);
+      pointer-events: none;
     }
-    .review-card {
-      background: var(--c-white);
-      border: 1px solid rgba(28,20,16,.07);
-      border-radius: var(--r-card);
-      padding: 32px 30px;
-      transition: transform .4s var(--ease-bounce), box-shadow .4s;
+    .review-carousel {
+      max-width: 900px; margin: 0 auto;
+      position: relative;
     }
-    .review-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 24px 48px rgba(28,20,16,.1);
-    }
-    .review-stars {
-      display: flex; gap: 4px; margin-bottom: 16px;
-    }
-    .review-star { color: var(--c-gold); font-size: 16px; }
-    .review-text {
-      font-family: var(--f-display); font-style: italic;
-      font-size: clamp(14px, 1.2vw, 17px);
-      color: var(--c-earth); line-height: 1.65;
-      margin-bottom: 20px;
-    }
-    .review-author {
-      display: flex; align-items: center; gap: 12px;
-    }
-    .review-author-avatar {
-      width: 42px; height: 42px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--c-gold), var(--c-brown));
+    .review-carousel__track {
+      position: relative;
+      min-height: 340px;
       display: flex; align-items: center; justify-content: center;
-      font-family: var(--f-accent); font-size: 18px;
-      color: var(--c-earth); flex-shrink: 0;
     }
-    .review-author-name {
-      font-weight: 600; font-size: 14px; color: var(--c-earth);
+    .review-slide {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      transform: scale(.94) translateY(16px);
+      transition: opacity .6s var(--ease-out), transform .6s var(--ease-out);
+      pointer-events: none;
     }
-    .review-author-from {
-      font-size: 12px; font-weight: 300; color: rgba(28,20,16,.45);
-      letter-spacing: .05em;
+    .review-slide.active {
+      opacity: 1; transform: scale(1) translateY(0);
+      pointer-events: auto; position: relative;
+    }
+    .review-slide img {
+      max-width: 420px; width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 24px 72px rgba(0,0,0,.55), 0 0 0 1px rgba(212,168,67,.15);
+      display: block;
+    }
+    /* nav */
+    .review-carousel__nav {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      margin-top: 32px;
+    }
+    .review-carousel__btn {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(212,168,67,.1);
+      border: 1px solid rgba(212,168,67,.3);
+      color: var(--c-gold); font-size: 20px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background .25s, transform .3s var(--ease-bounce), border-color .25s;
+      flex-shrink: 0;
+    }
+    .review-carousel__btn:hover {
+      background: var(--c-gold); color: var(--c-earth);
+      border-color: var(--c-gold); transform: scale(1.1);
+    }
+    .review-carousel__dots {
+      display: flex; gap: 8px; align-items: center;
+    }
+    .review-carousel__dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(212,168,67,.3);
+      border: none; cursor: pointer; padding: 0;
+      transition: background .25s, width .3s var(--ease-bounce);
+    }
+    .review-carousel__dot.active {
+      background: var(--c-gold); width: 24px; border-radius: 4px;
+    }
+    /* progress bar */
+    .review-carousel__progress {
+      height: 2px; background: rgba(212,168,67,.15);
+      border-radius: 2px; margin-bottom: 32px;
+      max-width: 900px; margin-left: auto; margin-right: auto;
+      overflow: hidden;
+    }
+    .review-carousel__progress-bar {
+      height: 100%; width: 0%;
+      background: var(--c-gold);
+      border-radius: 2px;
+      transition: width linear;
     }
 
     /* ─── CONTACTS ───────────────────────────────────────── */
@@ -1041,7 +1078,6 @@
       .why__grid { grid-template-columns: repeat(2, 1fr); }
       .how__inner { grid-template-columns: 1fr; gap: 40px; }
       .contacts__inner { grid-template-columns: 1fr; }
-      .review-strip__inner { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 640px) {
       :root { --nav-h: 60px; --gutter: 18px; }
@@ -1085,10 +1121,6 @@
       .how__step { grid-template-columns: 40px 1fr; gap: 14px; }
       .how__step__num { font-size: 32px; }
       .how__aside__card { padding: 24px 22px; }
-
-      /* reviews */
-      .review-strip__inner { grid-template-columns: 1fr; gap: 14px; }
-      .review-card { padding: 24px 22px; }
 
       /* contacts */
       .contacts__inner { gap: 36px; }
@@ -1357,49 +1389,29 @@
 <!-- ═══ REVIEWS ═══════════════════════════════════════════ -->
 <section class="review-strip" aria-labelledby="rev-h">
   <div class="s-head" data-reveal="up">
-    <div class="s-head__kicker"> </div>
-    <h2 class="s-head__title" id="rev-h">Guest Reviews from<br><em>Real Explorers</em></h2>
+    <div class="s-head__kicker s-head__kicker--light">What Travelers Say</div>
+    <h2 class="s-head__title s-head__title--light" id="rev-h">Real Reviews from<br><em>Real Travelers</em></h2>
   </div>
-  <div class="review-strip__inner">
-    <article class="review-card" data-reveal="up" data-delay="1">
-      <div class="review-stars">
-        <span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span>
-      </div>
-      <p class="review-text">"The Ala-Archa trek was beyond anything I imagined. Our guide knew every trail, every story. Absolutely unforgettable."</p>
-      <div class="review-author">
-        <div class="review-author-avatar">S</div>
-        <div>
-          <div class="review-author-name">Saif Al-Rashid</div>
-          <div class="review-author-from">Saudi Arabia 🇸🇦</div>
-        </div>
-      </div>
-    </article>
-    <article class="review-card" data-reveal="up" data-delay="2">
-      <div class="review-stars">
-        <span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span>
-      </div>
-      <p class="review-text">"Horseback riding through the mountains felt like traveling back in time. The local knowledge of our guide made it extra special."</p>
-      <div class="review-author">
-        <div class="review-author-avatar">M</div>
-        <div>
-          <div class="review-author-name">Maria Schmidt</div>
-          <div class="review-author-from">Germany 🇩🇪</div>
-        </div>
-      </div>
-    </article>
-    <article class="review-card" data-reveal="up" data-delay="3">
-      <div class="review-stars">
-        <span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span>
-      </div>
-      <p class="review-text">"Köl-Suu was jaw-dropping. Hidden, untouched, magical. No other tour company would have taken us there. Highly recommend!"</p>
-      <div class="review-author">
-        <div class="review-author-avatar">J</div>
-        <div>
-          <div class="review-author-name">James Liu</div>
-          <div class="review-author-from">United States 🇺🇸</div>
-        </div>
-      </div>
-    </article>
+  <div class="review-carousel__progress" id="revProgress">
+    <div class="review-carousel__progress-bar" id="revProgressBar"></div>
+  </div>
+  <div class="review-carousel">
+    <div class="review-carousel__track" id="revTrack">
+      <div class="review-slide active"><img src="images/review1.png" alt="Review by Edward"/></div>
+      <div class="review-slide"><img src="images/review2.png" alt="Review by Ahmed from France"/></div>
+      <div class="review-slide"><img src="images/review3.png" alt="Review from WhatsApp September 2025"/></div>
+      <div class="review-slide"><img src="images/review4.png" alt="Review by Nilesh from US"/></div>
+      <div class="review-slide"><img src="images/review5.png" alt="Review by Saif"/></div>
+      <div class="review-slide"><img src="images/review6.png" alt="Review by Ezwan"/></div>
+      <div class="review-slide"><img src="images/review7.png" alt="Review by Khalid"/></div>
+      <div class="review-slide"><img src="images/review8.png" alt="Review by Peera S"/></div>
+      <div class="review-slide"><img src="images/review9.png" alt="Review by John"/></div>
+    </div>
+    <div class="review-carousel__nav">
+      <button class="review-carousel__btn" id="revPrev" aria-label="Previous">&#8592;</button>
+      <div class="review-carousel__dots" id="revDots"></div>
+      <button class="review-carousel__btn" id="revNext" aria-label="Next">&#8594;</button>
+    </div>
   </div>
 </section>
 
@@ -1485,6 +1497,56 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
+  /* ── REVIEW CAROUSEL ───────────────────────── */
+  (function(){
+    const slides   = document.querySelectorAll('.review-slide');
+    const dotsEl   = document.getElementById('revDots');
+    const bar      = document.getElementById('revProgressBar');
+    const DURATION = 4000;
+    let cur = 0, timer;
+
+    slides.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = 'review-carousel__dot' + (i===0?' active':'');
+      d.setAttribute('aria-label', 'Review '+(i+1));
+      d.addEventListener('click', () => goTo(i));
+      dotsEl.appendChild(d);
+    });
+
+    function goTo(idx) {
+      slides[cur].classList.remove('active');
+      dotsEl.children[cur].classList.remove('active');
+      cur = (idx + slides.length) % slides.length;
+      slides[cur].classList.add('active');
+      dotsEl.children[cur].classList.add('active');
+      resetProgress();
+    }
+
+    function resetProgress() {
+      clearTimeout(timer);
+      bar.style.transition = 'none';
+      bar.style.width = '0%';
+      setTimeout(() => {
+        bar.style.transition = 'width ' + DURATION + 'ms linear';
+        bar.style.width = '100%';
+      }, 30);
+      timer = setTimeout(() => goTo(cur + 1), DURATION);
+    }
+
+    document.getElementById('revPrev').addEventListener('click', () => goTo(cur - 1));
+    document.getElementById('revNext').addEventListener('click', () => goTo(cur + 1));
+
+    const track = document.getElementById('revTrack');
+    let tx = 0;
+    track.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+    track.addEventListener('touchend', e => {
+      const d = tx - e.changedTouches[0].clientX;
+      if (Math.abs(d) > 40) goTo(d > 0 ? cur+1 : cur-1);
+    });
+
+    resetProgress();
+  })();
+
   /* ── NAV SCROLL ─────────────────────────────── */
   const nav = document.getElementById('nav');
   window.addEventListener('scroll', () => {
