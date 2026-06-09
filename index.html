@@ -549,56 +549,75 @@
       color: var(--c-white); line-height: 1.3;
     }
 
-    /* ─── НОВЫЕ СТИЛИ ДЛЯ ТРЁХ ГОРИЗОНТАЛЬНЫХ КАРТОЧЕК (TRIPLE SLIDER) ─── */
-    .triple-slider {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 28px;
+    /* ─── TOUR PHOTO CONVEYOR SLIDER ─── */
+    .tour-slider-wrap {
       max-width: var(--max-w);
       margin: 0 auto;
+      position: relative;
     }
-    .triple-slide {
-      flex: 1 1 280px;
-      min-width: 240px;
-      background: rgba(0,0,0,0.2);
+    .tour-slider-viewport {
+      overflow: hidden;
+      border-radius: var(--r-card);
+    }
+    .tour-slider-track {
+      display: flex;
+      gap: 20px;
+      /* width set by JS */
+      will-change: transform;
+      transition: transform 0.55s var(--ease-out);
+    }
+    .tour-slide {
+      flex: 0 0 calc((100% - 40px) / 3);
       border-radius: var(--r-card);
       overflow: hidden;
-      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
-      transition: transform 0.4s var(--ease-bounce);
+      box-shadow: 0 20px 40px rgba(0,0,0,.45);
     }
-    .triple-slide:hover {
-      transform: translateY(-8px);
-    }
-    .triple-slide img {
+    .tour-slide img {
       width: 100%;
       aspect-ratio: 4 / 3;
       object-fit: cover;
       display: block;
-      transition: opacity 0.8s ease;
-      opacity: 1;
     }
-    .triple-slide-caption {
-      padding: 18px 20px 22px;
-      background: rgba(28,20,16,.7);
-      backdrop-filter: blur(12px);
-      color: var(--c-cream);
-      font-family: var(--f-body);
+    /* nav buttons */
+    .tour-slider-nav {
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      margin-top: 32px;
     }
-    .triple-slide-caption span {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--c-gold);
-      display: inline-block;
-      margin-bottom: 6px;
+    .tour-slider-btn {
+      width: 50px; height: 50px; border-radius: 50%;
+      background: rgba(212,168,67,.12);
+      border: 1px solid rgba(212,168,67,.35);
+      color: var(--c-gold); font-size: 22px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background .25s, transform .3s var(--ease-bounce), border-color .25s;
+      flex-shrink: 0;
     }
-    .triple-slide-caption p {
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 1.4;
-      margin: 0;
+    .tour-slider-btn:hover {
+      background: var(--c-gold); color: var(--c-earth);
+      border-color: var(--c-gold); transform: scale(1.1);
+    }
+    .tour-slider-dots {
+      display: flex; gap: 8px; align-items: center;
+    }
+    .tour-slider-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(212,168,67,.3);
+      border: none; cursor: pointer; padding: 0;
+      transition: background .25s, width .3s var(--ease-bounce);
+    }
+    .tour-slider-dot.active {
+      background: var(--c-gold); width: 24px; border-radius: 4px;
+    }
+    @media (max-width: 640px) {
+      .tour-slide {
+        flex: 0 0 calc((100% - 20px) / 2);
+      }
+    }
+    @media (max-width: 420px) {
+      .tour-slide {
+        flex: 0 0 85%;
+      }
     }
 
     /* ─── EXPERIENCE STRIP ───────────────────────────────── */
@@ -1111,12 +1130,6 @@
       .gallery__item:nth-child(1), .gallery__item:nth-child(4) { grid-column: span 12; aspect-ratio: 1.4; }
       .gallery__item:nth-child(2), .gallery__item:nth-child(3) { grid-column: span 12; aspect-ratio: 1.4; }
 
-      /* новая галерея на мобилке — в столбик */
-      .triple-slide {
-        flex: 1 1 100%;
-        max-width: 380px;
-      }
-
       /* experiences */
       .exp__grid { grid-template-columns: 1fr; }
       .exp__card__body { padding: 18px 20px 22px; }
@@ -1266,22 +1279,41 @@
   </div>
 </section>
 
-<!-- ═══ НОВАЯ ГАЛЕРЕЯ: ТРИ ГОРИЗОНТАЛЬНЫЕ КАРТОЧКИ БЕЗ ТЕКСТА ═══════ -->
+<!-- ═══ НОВАЯ ГАЛЕРЕЯ: КОНВЕЙЕР 3 ФОТО ═══════════════════ -->
 <section class="gallery" id="tours" aria-labelledby="gal-h">
   <div class="s-head" data-reveal="up">
     <div class="s-head__kicker s-head__kicker--light">Our Work</div>
     <h2 class="s-head__title s-head__title--light" id="gal-h">Real <em>Adventures,</em><br>Real Memories</h2>
-    <!-- подзаголовок удалён -->
   </div>
-  <div class="triple-slider" data-reveal="scale">
-    <div class="triple-slide">
-      <img id="galleryImg1" src="images/gallery1.jpg" alt="Тур KyrgyzView">
+  <div class="tour-slider-wrap" data-reveal="scale">
+    <div class="tour-slider-viewport">
+      <div class="tour-slider-track" id="tourTrack">
+        <div class="tour-slide"><img src="images/tour1.jpg"  alt="Tour photo 1"/></div>
+        <div class="tour-slide"><img src="images/tour2.jpg"  alt="Tour photo 2"/></div>
+        <div class="tour-slide"><img src="images/tour3.jpg"  alt="Tour photo 3"/></div>
+        <div class="tour-slide"><img src="images/tour4.jpg"  alt="Tour photo 4"/></div>
+        <div class="tour-slide"><img src="images/tour5.jpg"  alt="Tour photo 5"/></div>
+        <div class="tour-slide"><img src="images/tour6.jpg"  alt="Tour photo 6"/></div>
+        <div class="tour-slide"><img src="images/tour7.jpg"  alt="Tour photo 7"/></div>
+        <div class="tour-slide"><img src="images/tour8.jpg"  alt="Tour photo 8"/></div>
+        <div class="tour-slide"><img src="images/tour9.jpg"  alt="Tour photo 9"/></div>
+        <div class="tour-slide"><img src="images/tour10.jpg" alt="Tour photo 10"/></div>
+        <div class="tour-slide"><img src="images/tour11.jpg" alt="Tour photo 11"/></div>
+        <div class="tour-slide"><img src="images/tour12.jpg" alt="Tour photo 12"/></div>
+        <div class="tour-slide"><img src="images/tour13.jpg" alt="Tour photo 13"/></div>
+        <div class="tour-slide"><img src="images/tour14.jpg" alt="Tour photo 14"/></div>
+        <div class="tour-slide"><img src="images/tour15.jpg" alt="Tour photo 15"/></div>
+        <div class="tour-slide"><img src="images/tour16.jpg" alt="Tour photo 16"/></div>
+        <div class="tour-slide"><img src="images/tour17.jpg" alt="Tour photo 17"/></div>
+        <div class="tour-slide"><img src="images/tour18.jpg" alt="Tour photo 18"/></div>
+        <div class="tour-slide"><img src="images/tour19.jpg" alt="Tour photo 19"/></div>
+        <div class="tour-slide"><img src="images/tour20.jpg" alt="Tour photo 20"/></div>
+      </div>
     </div>
-    <div class="triple-slide">
-      <img id="galleryImg2" src="images/gallery2.jpg" alt="Конные туры">
-    </div>
-    <div class="triple-slide">
-      <img id="galleryImg3" src="images/gallery3.jpg" alt="Культурные туры">
+    <div class="tour-slider-nav">
+      <button class="tour-slider-btn" id="tourPrev" aria-label="Previous">&#8592;</button>
+      <div class="tour-slider-dots" id="tourDots"></div>
+      <button class="tour-slider-btn" id="tourNext" aria-label="Next">&#8594;</button>
     </div>
   </div>
 </section>
@@ -1397,9 +1429,6 @@
     <div class="s-head__kicker s-head__kicker--light">What Travelers Say</div>
     <h2 class="s-head__title s-head__title--light" id="rev-h">Real Reviews from<br><em>Real Travelers</em></h2>
   </div>
-  <div class="review-carousel__progress" id="revProgress">
-    <div class="review-carousel__progress-bar" id="revProgressBar"></div>
-  </div>
   <div class="review-carousel">
     <div class="review-carousel__track" id="revTrack">
       <div class="review-slide active"><img src="images/review1.png" alt="Review by Edward"/></div>
@@ -1502,13 +1531,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
-  /* ── REVIEW CAROUSEL ───────────────────────── */
+  /* ── REVIEW CAROUSEL (manual only, no auto-timer) ─── */
   (function(){
-    const slides   = document.querySelectorAll('.review-slide');
-    const dotsEl   = document.getElementById('revDots');
-    const bar      = document.getElementById('revProgressBar');
-    const DURATION = 4000;
-    let cur = 0, timer;
+    const slides = document.querySelectorAll('.review-slide');
+    const dotsEl = document.getElementById('revDots');
+    let cur = 0;
 
     slides.forEach((_, i) => {
       const d = document.createElement('button');
@@ -1524,18 +1551,6 @@
       cur = (idx + slides.length) % slides.length;
       slides[cur].classList.add('active');
       dotsEl.children[cur].classList.add('active');
-      resetProgress();
-    }
-
-    function resetProgress() {
-      clearTimeout(timer);
-      bar.style.transition = 'none';
-      bar.style.width = '0%';
-      setTimeout(() => {
-        bar.style.transition = 'width ' + DURATION + 'ms linear';
-        bar.style.width = '100%';
-      }, 30);
-      timer = setTimeout(() => goTo(cur + 1), DURATION);
     }
 
     document.getElementById('revPrev').addEventListener('click', () => goTo(cur - 1));
@@ -1548,8 +1563,6 @@
       const d = tx - e.changedTouches[0].clientX;
       if (Math.abs(d) > 40) goTo(d > 0 ? cur+1 : cur-1);
     });
-
-    resetProgress();
   })();
 
   /* ── NAV SCROLL ─────────────────────────────── */
@@ -1661,50 +1674,62 @@
     };
   }, 5000);
 
-  /* ─── НОВАЯ ГАЛЕРЕЯ: ТРИ ФОТО, ПЛАВНАЯ СМЕНА КАЖДЫЕ 3 СЕКУНДЫ ─── */
-  const galleryImages = [
-    'images/gallery1.jpg',
-    'images/gallery2.jpg',
-    'images/gallery3.jpg',
-    'images/gallery4.jpg'
-    // при желании добавьте сюда gallery5.jpg и т.д.
-  ];
-  let currentTripleStart = 0;
-  const img1 = document.getElementById('galleryImg1');
-  const img2 = document.getElementById('galleryImg2');
-  const img3 = document.getElementById('galleryImg3');
+  /* ── TOUR CONVEYOR SLIDER ─────────────────────────── */
+  (function(){
+    const TOTAL   = 20;
+    const GAP     = 20;
+    const AUTO_MS = 3000;
 
-  function updateTriple(startIndex) {
-    if (!img1 || !img2 || !img3) return;
-    const len = galleryImages.length;
-    const next1 = galleryImages[startIndex % len];
-    const next2 = galleryImages[(startIndex + 1) % len];
-    const next3 = galleryImages[(startIndex + 2) % len];
-    // плавная смена
-    img1.style.transition = 'opacity 0.8s ease';
-    img2.style.transition = 'opacity 0.8s ease';
-    img3.style.transition = 'opacity 0.8s ease';
-    img1.style.opacity = '0.3';
-    img2.style.opacity = '0.3';
-    img3.style.opacity = '0.3';
-    setTimeout(() => {
-      img1.src = next1;
-      img2.src = next2;
-      img3.src = next3;
-      setTimeout(() => {
-        img1.style.opacity = '1';
-        img2.style.opacity = '1';
-        img3.style.opacity = '1';
-      }, 20);
-    }, 200);
-  }
+    const track  = document.getElementById('tourTrack');
+    const dotsEl = document.getElementById('tourDots');
+    if (!track || !dotsEl) return;
+    const slides = Array.from(track.querySelectorAll('.tour-slide'));
+    let cur = 0, autoTimer;
 
-  function nextTriple() {
-    currentTripleStart = (currentTripleStart + 1) % galleryImages.length;
-    updateTriple(currentTripleStart);
-  }
+    for (let i = 0; i < TOTAL; i++) {
+      const d = document.createElement('button');
+      d.className = 'tour-slider-dot' + (i===0?' active':'');
+      d.setAttribute('aria-label', 'Photo '+(i+1));
+      d.addEventListener('click', () => { goTo(i); resetAuto(); });
+      dotsEl.appendChild(d);
+    }
 
-  setInterval(nextTriple, 3000);
+    function getSlideW() {
+      return slides[0].getBoundingClientRect().width;
+    }
+
+    function goTo(idx) {
+      cur = ((idx % TOTAL) + TOTAL) % TOTAL;
+      const w = getSlideW();
+      track.style.transform = `translateX(-${cur * (w + GAP)}px)`;
+      dotsEl.querySelectorAll('.tour-slider-dot').forEach((d,i) => {
+        d.classList.toggle('active', i === cur);
+      });
+    }
+
+    function next() { goTo(cur + 1); }
+    function prev() { goTo(cur - 1); }
+
+    function resetAuto() {
+      clearInterval(autoTimer);
+      autoTimer = setInterval(next, AUTO_MS);
+    }
+
+    document.getElementById('tourPrev').addEventListener('click', () => { prev(); resetAuto(); });
+    document.getElementById('tourNext').addEventListener('click', () => { next(); resetAuto(); });
+
+    let tx = 0;
+    track.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+    track.addEventListener('touchend', e => {
+      const d = tx - e.changedTouches[0].clientX;
+      if (Math.abs(d) > 40) { d > 0 ? next() : prev(); resetAuto(); }
+    });
+
+    window.addEventListener('resize', () => goTo(cur), {passive:true});
+
+    goTo(0);
+    resetAuto();
+  })();
 </script>
 </body>
 </html>
