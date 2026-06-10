@@ -1215,7 +1215,6 @@
     <div class="nav__links" role="list">
       <a class="nav__link" href="#why" role="listitem">About</a>
       <a class="nav__link" href="#tours" role="listitem">Gallery</a>
-      <a class="nav__link" href="#experiences" role="listitem">Tours</a>
       <a class="nav__link" href="#contacts" role="listitem">Contact</a>
     </div>
     <a class="nav__cta" href="https://wa.me/996703355322" target="_blank" rel="noopener">Book Now</a>
@@ -1226,7 +1225,6 @@
   <div class="nav__drawer" id="drawer" aria-hidden="true">
     <a href="#why">About</a>
     <a href="#tours">Gallery</a>
-    <a href="#experiences">Tours</a>
     <a href="#contacts">Contact</a>
   </div>
 </header>
@@ -1302,7 +1300,6 @@
       <span class="why__card__num">01</span>
       <img class="why__card__img" src="images/guide.png" alt="English-speaking guide icon"/>
       <h3 class="why__card__title">English-Speaking Guides</h3>
-      <p class="why__card__short">Seamless communication for international travelers — feel at home in the wild.</p>
       <div class="why__card__expand-hint">
         <span>Read more</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -1315,7 +1312,6 @@
       <span class="why__card__num">02</span>
       <img class="why__card__img" src="images/custom-tour.png" alt="Custom tours map"/>
       <h3 class="why__card__title">Custom Tours</h3>
-      <p class="why__card__short">We craft every itinerary around your interests, pace, and group.</p>
       <div class="why__card__expand-hint">
         <span>Read more</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -1328,7 +1324,6 @@
       <span class="why__card__num">03</span>
       <img class="why__card__img" src="images/local-guide.png" alt="Local guide"/>
       <h3 class="why__card__title">Local Expertise</h3>
-      <p class="why__card__short">Born and raised here — we know every hidden trail, village, and viewpoint.</p>
       <div class="why__card__expand-hint">
         <span>Read more</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -1341,7 +1336,6 @@
       <span class="why__card__num">04</span>
       <img class="why__card__img" src="images/safe.png" alt="Safe & Reliable shield"/>
       <h3 class="why__card__title">Safe & Reliable</h3>
-      <p class="why__card__short">Experienced team, trusted routes, and full support throughout your journey.</p>
       <div class="why__card__expand-hint">
         <span>Read more</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -1452,22 +1446,24 @@
     <div class="s-head__kicker s-head__kicker--light">What Travelers Say</div>
     <h2 class="s-head__title s-head__title--light" id="rev-h">Real Reviews from<br><em>Real Travelers</em></h2>
   </div>
-  <div class="review-carousel">
-    <div class="review-carousel__track" id="revTrack">
-      <div class="review-slide active"><img src="images/review1.png" alt="Review by Edward"/></div>
-      <div class="review-slide"><img src="images/review2.png" alt="Review by Ahmed from France"/></div>
-      <div class="review-slide"><img src="images/review3.png" alt="Review from WhatsApp September 2025"/></div>
-      <div class="review-slide"><img src="images/review4.png" alt="Review by Nilesh from US"/></div>
-      <div class="review-slide"><img src="images/review5.png" alt="Review by Saif"/></div>
-      <div class="review-slide"><img src="images/review6.png" alt="Review by Ezwan"/></div>
-      <div class="review-slide"><img src="images/review7.png" alt="Review by Khalid"/></div>
-      <div class="review-slide"><img src="images/review8.png" alt="Review by Peera S"/></div>
-      <div class="review-slide"><img src="images/review9.png" alt="Review by John"/></div>
+  <div class="tour-slider-wrap" data-reveal="scale">
+    <div class="tour-slider-viewport">
+      <div class="tour-slider-track" id="revTrack">
+        <div class="tour-slide"><img src="images/review1.png" alt="Review by Edward"/></div>
+        <div class="tour-slide"><img src="images/review2.png" alt="Review by Ahmed from France"/></div>
+        <div class="tour-slide"><img src="images/review3.png" alt="Review from WhatsApp September 2025"/></div>
+        <div class="tour-slide"><img src="images/review4.png" alt="Review by Nilesh from US"/></div>
+        <div class="tour-slide"><img src="images/review5.png" alt="Review by Saif"/></div>
+        <div class="tour-slide"><img src="images/review6.png" alt="Review by Ezwan"/></div>
+        <div class="tour-slide"><img src="images/review7.png" alt="Review by Khalid"/></div>
+        <div class="tour-slide"><img src="images/review8.png" alt="Review by Peera S"/></div>
+        <div class="tour-slide"><img src="images/review9.png" alt="Review by John"/></div>
+      </div>
     </div>
-    <div class="review-carousel__nav">
-      <button class="review-carousel__btn" id="revPrev" aria-label="Previous">&#8592;</button>
-      <div class="review-carousel__dots" id="revDots"></div>
-      <button class="review-carousel__btn" id="revNext" aria-label="Next">&#8594;</button>
+    <div class="tour-slider-nav">
+      <button class="tour-slider-btn" id="revPrev" aria-label="Previous">&#8592;</button>
+      <div class="tour-slider-dots" id="revDots"></div>
+      <button class="tour-slider-btn" id="revNext" aria-label="Next">&#8594;</button>
     </div>
   </div>
 </section>
@@ -1542,7 +1538,6 @@
       <a href="#hero">Home</a>
       <a href="#why">About</a>
       <a href="#tours">Gallery</a>
-      <a href="#experiences">Tours</a>
       <a href="#contacts">Contact</a>
     </nav>
     <p class="footer__copy">
@@ -1554,38 +1549,50 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
-  /* ── REVIEW CAROUSEL (manual only, no auto-timer) ─── */
+  /* ── REVIEW SLIDER (3-per-page conveyor, no auto-timer) ─── */
   (function(){
-    const slides = document.querySelectorAll('.review-slide');
+    const TOTAL   = 9;
+    const GAP     = 20;
+
+    const track  = document.getElementById('revTrack');
     const dotsEl = document.getElementById('revDots');
+    if (!track || !dotsEl) return;
+    const slides = Array.from(track.querySelectorAll('.tour-slide'));
     let cur = 0;
 
-    slides.forEach((_, i) => {
+    for (let i = 0; i < TOTAL; i++) {
       const d = document.createElement('button');
-      d.className = 'review-carousel__dot' + (i===0?' active':'');
+      d.className = 'tour-slider-dot' + (i===0?' active':'');
       d.setAttribute('aria-label', 'Review '+(i+1));
       d.addEventListener('click', () => goTo(i));
       dotsEl.appendChild(d);
-    });
+    }
+
+    function getSlideW() {
+      return slides[0].getBoundingClientRect().width;
+    }
 
     function goTo(idx) {
-      slides[cur].classList.remove('active');
-      dotsEl.children[cur].classList.remove('active');
-      cur = (idx + slides.length) % slides.length;
-      slides[cur].classList.add('active');
-      dotsEl.children[cur].classList.add('active');
+      cur = ((idx % TOTAL) + TOTAL) % TOTAL;
+      const w = getSlideW();
+      track.style.transform = `translateX(-${cur * (w + GAP)}px)`;
+      dotsEl.querySelectorAll('.tour-slider-dot').forEach((d,i) => {
+        d.classList.toggle('active', i === cur);
+      });
     }
 
     document.getElementById('revPrev').addEventListener('click', () => goTo(cur - 1));
     document.getElementById('revNext').addEventListener('click', () => goTo(cur + 1));
 
-    const track = document.getElementById('revTrack');
     let tx = 0;
     track.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
     track.addEventListener('touchend', e => {
       const d = tx - e.changedTouches[0].clientX;
       if (Math.abs(d) > 40) goTo(d > 0 ? cur+1 : cur-1);
     });
+
+    window.addEventListener('resize', () => goTo(cur), {passive:true});
+    goTo(0);
   })();
 
   /* ── NAV SCROLL ─────────────────────────────── */
@@ -1701,13 +1708,11 @@
   document.querySelectorAll('.why__card').forEach(card => {
     function toggle() {
       const isOpen = card.classList.contains('open');
-      // Close all others
-      document.querySelectorAll('.why__card.open').forEach(c => {
-        c.classList.remove('open');
-        c.setAttribute('aria-expanded', 'false');
-        c.querySelector('.why__card__expand-hint span').textContent = 'Read more';
-      });
-      if (!isOpen) {
+      if (isOpen) {
+        card.classList.remove('open');
+        card.setAttribute('aria-expanded', 'false');
+        card.querySelector('.why__card__expand-hint span').textContent = 'Read more';
+      } else {
         card.classList.add('open');
         card.setAttribute('aria-expanded', 'true');
         card.querySelector('.why__card__expand-hint span').textContent = 'Read less';
