@@ -448,7 +448,7 @@
       padding: 40px 28px 44px;
       display: flex; flex-direction: column; align-items: flex-start;
       gap: 16px;
-      cursor: default;
+      cursor: pointer;
       transition: transform .45s var(--ease-bounce), box-shadow .4s, border-color .3s;
       position: relative; overflow: hidden;
     }
@@ -484,6 +484,45 @@
     .why__card__desc {
       font-size: 14px; font-weight: 300;
       color: rgba(28,20,16,.6); line-height: 1.6;
+    }
+
+    /* ─── WHY CARD ACCORDION ─────────────────────────────── */
+    .why__card {
+      cursor: pointer;
+    }
+    .why__card__short {
+      font-size: 14px; font-weight: 300;
+      color: rgba(28,20,16,.6); line-height: 1.6;
+    }
+    .why__card__expand-hint {
+      display: flex; align-items: center; gap: 6px;
+      margin-top: 12px;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--c-brown);
+      transition: color .2s;
+    }
+    .why__card__expand-hint svg {
+      transition: transform .35s var(--ease-out);
+      flex-shrink: 0;
+    }
+    .why__card.open .why__card__expand-hint svg { transform: rotate(180deg); }
+    .why__card.open .why__card__expand-hint { color: var(--c-gold); }
+    .why__card__body {
+      max-height: 0; overflow: hidden;
+      transition: max-height .5s var(--ease-out), opacity .4s;
+      opacity: 0;
+    }
+    .why__card.open .why__card__body {
+      max-height: 400px;
+      opacity: 1;
+    }
+    .why__card__full {
+      padding-top: 14px;
+      font-size: 14px; font-weight: 300;
+      color: rgba(28,20,16,.65); line-height: 1.7;
+      border-top: 1px solid rgba(212,168,67,.2);
+      margin-top: 4px;
     }
 
     /* ─── DESTINATIONS / GALLERY (старые стили bento остаются, но не используются) ── */
@@ -693,14 +732,14 @@
     /* ─── HOW IT WORKS ───────────────────────────────────── */
     .how {
       padding: clamp(80px, 10vw, 130px) var(--gutter);
-      background: var(--c-earth);
+      background: var(--c-cream);
       position: relative; overflow: hidden;
     }
     .how::before {
       content: '';
       position: absolute; top: -100px; left: -100px;
       width: 600px; height: 600px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(212,168,67,.07) 0%, transparent 65%);
+      background: radial-gradient(circle, rgba(212,168,67,.09) 0%, transparent 65%);
     }
     .how__inner {
       max-width: var(--max-w); margin: 0 auto;
@@ -724,36 +763,43 @@
     .how__step__content {}
     .how__step__title {
       font-family: var(--f-display); font-size: clamp(18px, 2vw, 26px);
-      font-weight: 700; color: var(--c-cream); margin-bottom: 4px; line-height: 1.2;
+      font-weight: 700; color: var(--c-earth); margin-bottom: 4px; line-height: 1.2;
     }
     .how__step__desc {
       font-size: 13px; font-weight: 300;
-      color: rgba(250,245,236,.4); line-height: 1.6;
+      color: rgba(28,20,16,.55); line-height: 1.6;
+    }
+    .how__step {
+      border-bottom-color: rgba(28,20,16,.1);
+    }
+    .how__step__num {
+      color: var(--c-gold);
     }
     .how__aside { display: flex; flex-direction: column; gap: 20px; }
     .how__aside__card {
-      border: 1px solid rgba(212,168,67,.2);
+      background: var(--c-white);
+      border: 1px solid rgba(28,20,16,.08);
       border-radius: var(--r-card);
       padding: 36px 32px;
       position: relative; overflow: hidden;
-      transition: border-color .3s, transform .4s var(--ease-bounce);
+      transition: border-color .3s, transform .4s var(--ease-bounce), box-shadow .4s;
     }
-    .how__aside__card:hover { border-color: rgba(212,168,67,.5); transform: translateX(8px); }
+    .how__aside__card:hover { border-color: rgba(212,168,67,.4); transform: translateX(8px); box-shadow: 0 20px 48px rgba(28,20,16,.1); }
     .how__aside__card::before {
       content: '';
       position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(212,168,67,.06) 0%, transparent 60%);
+      background: linear-gradient(135deg, rgba(212,168,67,.05) 0%, transparent 60%);
     }
     .how__aside__card-icon {
       font-size: 32px; margin-bottom: 14px;
     }
     .how__aside__card-title {
       font-family: var(--f-display); font-size: clamp(20px, 2vw, 28px);
-      font-weight: 700; color: var(--c-gold-light); margin-bottom: 8px; line-height: 1.1;
+      font-weight: 700; color: var(--c-earth); margin-bottom: 8px; line-height: 1.1;
     }
     .how__aside__card-text {
       font-size: 14px; font-weight: 300;
-      color: rgba(250,245,236,.5); line-height: 1.65;
+      color: rgba(28,20,16,.6); line-height: 1.65;
     }
 
     /* ─── TESTIMONIAL STRIP ──────────────────────────────── */
@@ -1252,29 +1298,57 @@
     <p class="s-head__sub">We go beyond the tourist trail — every journey is personal, every moment unforgettable.</p>
   </div>
   <div class="why__grid">
-    <article class="why__card" data-reveal="up" data-delay="1">
+    <article class="why__card" data-reveal="up" data-delay="1" role="button" tabindex="0" aria-expanded="false">
       <span class="why__card__num">01</span>
       <img class="why__card__img" src="images/guide.png" alt="English-speaking guide icon"/>
       <h3 class="why__card__title">English-Speaking Guides</h3>
-      <p class="why__card__desc">Seamless communication for international travelers — feel at home in the wild.</p>
+      <p class="why__card__short">Seamless communication for international travelers — feel at home in the wild.</p>
+      <div class="why__card__expand-hint">
+        <span>Read more</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="why__card__body">
+        <p class="why__card__full">Our professional, English-speaking guides are passionate storytellers who bridge the gap between cultures. They don't just show you the sights; they bring Kyrgyzstan's rich history, nomadic traditions, and vibrant folklore to life. With exceptional communication skills and deep local knowledge, they ensure your journey is informative, engaging, and entirely seamless. You will travel with confidence, knowing you have a friendly, knowledgeable companion by your side every step of the way.</p>
+      </div>
     </article>
-    <article class="why__card" data-reveal="up" data-delay="2">
+    <article class="why__card" data-reveal="up" data-delay="2" role="button" tabindex="0" aria-expanded="false">
       <span class="why__card__num">02</span>
       <img class="why__card__img" src="images/custom-tour.png" alt="Custom tours map"/>
       <h3 class="why__card__title">Custom Tours</h3>
-      <p class="why__card__desc">We craft every itinerary around your interests, pace, and group.</p>
+      <p class="why__card__short">We craft every itinerary around your interests, pace, and group.</p>
+      <div class="why__card__expand-hint">
+        <span>Read more</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="why__card__body">
+        <p class="why__card__full">We believe that no two travelers are alike, which is why we specialize in crafting tailor-made itineraries that match your unique interests and pace. Whether you are looking for a thrilling trek through the celestial Tian Shan mountains or a peaceful cultural retreat in a traditional yurt, we design it just for you. Our team works closely with you to turn your dream vacation into a personalized, unforgettable reality. Explore Kyrgyzstan on your own terms with flexibility and freedom.</p>
+      </div>
     </article>
-    <article class="why__card" data-reveal="up" data-delay="3">
+    <article class="why__card" data-reveal="up" data-delay="3" role="button" tabindex="0" aria-expanded="false">
       <span class="why__card__num">03</span>
       <img class="why__card__img" src="images/local-guide.png" alt="Local guide"/>
       <h3 class="why__card__title">Local Expertise</h3>
-      <p class="why__card__desc">Born and raised here — we know every hidden trail, village, and viewpoint.</p>
+      <p class="why__card__short">Born and raised here — we know every hidden trail, village, and viewpoint.</p>
+      <div class="why__card__expand-hint">
+        <span>Read more</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="why__card__body">
+        <p class="why__card__full">As locals who know every hidden gem and breathtaking pass, we offer an authentic insider's perspective of Kyrgyzstan. Years of experience allow us to take you beyond the standard tourist trails to experience the true heart of hospitality and untouched nature. We connect you with local communities, traditional artisans, and secret spots that most travelers never get to see. With our expertise, you don't just visit Kyrgyzstan — you truly live it.</p>
+      </div>
     </article>
-    <article class="why__card" data-reveal="up" data-delay="4">
+    <article class="why__card" data-reveal="up" data-delay="4" role="button" tabindex="0" aria-expanded="false">
       <span class="why__card__num">04</span>
       <img class="why__card__img" src="images/safe.png" alt="Safe & Reliable shield"/>
       <h3 class="why__card__title">Safe & Reliable</h3>
-      <p class="why__card__desc">Experienced team, trusted routes, and full support throughout your journey.</p>
+      <p class="why__card__short">Experienced team, trusted routes, and full support throughout your journey.</p>
+      <div class="why__card__expand-hint">
+        <span>Read more</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="why__card__body">
+        <p class="why__card__full">Your safety, comfort, and peace of mind are our absolute top priorities from the moment you arrive until your departure. We partner only with trusted drivers, utilize well-maintained vehicles, and choose accommodations that meet high standards of quality. Our dedicated team provides 24/7 support throughout your trip to handle any unexpected situations swiftly and professionally. Travel with total confidence, knowing you are in safe, reliable, and caring hands.</p>
+      </div>
     </article>
   </div>
 </section>
@@ -1323,8 +1397,8 @@
   <div class="how__inner">
     <div data-reveal="left">
       <div class="s-head" style="text-align:left; margin-bottom:40px;">
-        <div class="s-head__kicker s-head__kicker--light">Process</div>
-        <h2 class="s-head__title s-head__title--light" id="how-h">How It <em>Works</em></h2>
+        <div class="s-head__kicker">Process</div>
+        <h2 class="s-head__title" id="how-h">How It <em>Works</em></h2>
       </div>
       <ol class="how__steps" aria-label="Steps to book">
         <li class="how__step">
@@ -1623,7 +1697,27 @@
     };
   }, 5000);
 
-  /* ── TOUR CONVEYOR SLIDER ─────────────────────────── */
+  /* ── WHY CARD ACCORDION ────────────────────────────── */
+  document.querySelectorAll('.why__card').forEach(card => {
+    function toggle() {
+      const isOpen = card.classList.contains('open');
+      // Close all others
+      document.querySelectorAll('.why__card.open').forEach(c => {
+        c.classList.remove('open');
+        c.setAttribute('aria-expanded', 'false');
+        c.querySelector('.why__card__expand-hint span').textContent = 'Read more';
+      });
+      if (!isOpen) {
+        card.classList.add('open');
+        card.setAttribute('aria-expanded', 'true');
+        card.querySelector('.why__card__expand-hint span').textContent = 'Read less';
+      }
+    }
+    card.addEventListener('click', toggle);
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+  });
+
+
   (function(){
     const TOTAL   = 20;
     const GAP     = 20;
