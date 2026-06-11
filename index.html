@@ -1195,9 +1195,13 @@
 
       /* why */
       .why__grid { grid-template-columns: 1fr; gap: 12px; }
-      .why__card { padding: 22px 18px 26px; flex-direction: row; text-align: left; gap: 14px; }
+      .why__card { padding: 22px 18px 26px; flex-direction: row; text-align: left; gap: 14px; align-items: flex-start; flex-wrap: wrap; }
       .why__card__img { width: 40px; height: 40px; flex-shrink: 0; }
       .why__card__num { font-size: 34px; top: 10px; right: 14px; }
+      .why__card__title { flex: 1; min-width: 0; }
+      .why__card__expand-hint { flex: 0 0 auto; }
+      /* when open, push the body to its own full-width row */
+      .why__card__body { flex: 0 0 100%; }
 
       /* gallery slider */
       .tour-slide { flex: 0 0 80%; }
