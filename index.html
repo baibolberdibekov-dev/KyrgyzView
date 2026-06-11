@@ -659,6 +659,27 @@
       }
     }
 
+    /* ─── REVIEW SLIDES (full image, no crop) ────────────── */
+    .rev-img-slide {
+      flex: 0 0 calc((100% - 40px) / 3);
+      border-radius: var(--r-card);
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,.45);
+      background: #fff;
+      align-self: flex-start;  /* each card height = its image height */
+    }
+    .rev-img-slide img {
+      width: 100%;
+      height: auto;       /* full image, no crop */
+      display: block;
+    }
+    @media (max-width: 900px) {
+      .rev-img-slide { flex: 0 0 calc((100% - 20px) / 2); }
+    }
+    @media (max-width: 560px) {
+      .rev-img-slide { flex: 0 0 88%; }
+    }
+
     /* ─── EXPERIENCE STRIP ───────────────────────────────── */
     .experiences {
       padding: clamp(80px, 10vw, 130px) var(--gutter);
@@ -802,7 +823,6 @@
       color: rgba(28,20,16,.6); line-height: 1.65;
     }
 
-    /* ─── TESTIMONIAL STRIP ──────────────────────────────── */
     /* ─── REVIEWS CAROUSEL ───────────────────────────────── */
     .review-strip {
       background: var(--c-earth);
@@ -815,81 +835,82 @@
       background: radial-gradient(ellipse at 50% 100%, rgba(212,168,67,.06) 0%, transparent 65%);
       pointer-events: none;
     }
-    .review-carousel {
-      max-width: 700px; margin: 0 auto;
+
+    /* slider wrap reuse from gallery */
+    .rev-slider-wrap {
+      max-width: var(--max-w);
+      margin: 0 auto;
       position: relative;
     }
-    .review-carousel__track {
-      position: relative;
-      display: flex; align-items: center; justify-content: center;
-      min-height: 200px;
-    }
-    .review-slide {
-      width: 100%;
-      display: none;
-      align-items: center; justify-content: center;
-      opacity: 0;
-      transform: scale(.94) translateY(16px);
-      transition: opacity .6s var(--ease-out), transform .6s var(--ease-out);
-    }
-    .review-slide.active {
-      display: flex;
-      opacity: 1; transform: scale(1) translateY(0);
-      animation: revIn .6s var(--ease-out) both;
-    }
-    @keyframes revIn {
-      from { opacity: 0; transform: scale(.94) translateY(16px); }
-      to   { opacity: 1; transform: scale(1) translateY(0); }
-    }
-    .review-slide img {
-      max-width: 580px; width: 100%;
-      border-radius: 20px;
-      box-shadow: 0 24px 72px rgba(0,0,0,.55), 0 0 0 1px rgba(212,168,67,.15);
-      display: block;
-    }
-    /* nav */
-    .review-carousel__nav {
-      display: flex; align-items: center; justify-content: center; gap: 12px;
-      margin-top: 32px;
-    }
-    .review-carousel__btn {
-      width: 48px; height: 48px; border-radius: 50%;
-      background: rgba(212,168,67,.1);
-      border: 1px solid rgba(212,168,67,.3);
-      color: var(--c-gold); font-size: 20px;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      transition: background .25s, transform .3s var(--ease-bounce), border-color .25s;
-      flex-shrink: 0;
-    }
-    .review-carousel__btn:hover {
-      background: var(--c-gold); color: var(--c-earth);
-      border-color: var(--c-gold); transform: scale(1.1);
-    }
-    .review-carousel__dots {
-      display: flex; gap: 8px; align-items: center;
-    }
-    .review-carousel__dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: rgba(212,168,67,.3);
-      border: none; cursor: pointer; padding: 0;
-      transition: background .25s, width .3s var(--ease-bounce);
-    }
-    .review-carousel__dot.active {
-      background: var(--c-gold); width: 24px; border-radius: 4px;
-    }
-    /* progress bar */
-    .review-carousel__progress {
-      height: 2px; background: rgba(212,168,67,.15);
-      border-radius: 2px; margin-bottom: 32px;
-      max-width: 900px; margin-left: auto; margin-right: auto;
+    .rev-slider-viewport {
       overflow: hidden;
+      padding-bottom: 12px;
+      margin-bottom: -12px;
     }
-    .review-carousel__progress-bar {
-      height: 100%; width: 0%;
-      background: var(--c-gold);
-      border-radius: 2px;
-      transition: width linear;
+    .rev-slider-track {
+      display: flex;
+      gap: 20px;
+      will-change: transform;
+      transition: transform 0.55s var(--ease-out);
+    }
+    .rev-slide {
+      flex: 0 0 calc((100% - 40px) / 3);
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(212,168,67,.18);
+      border-radius: var(--r-card);
+      padding: 32px 28px 36px;
+      display: flex; flex-direction: column; gap: 16px;
+      transition: border-color .3s, transform .4s var(--ease-bounce);
+    }
+    .rev-slide:hover {
+      border-color: rgba(212,168,67,.4);
+      transform: translateY(-6px);
+    }
+    .rev-slide__header {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .rev-slide__avatar {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: rgba(212,168,67,.15);
+      border: 2px solid rgba(212,168,67,.35);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--f-accent); font-size: 20px;
+      color: var(--c-gold);
+      flex-shrink: 0;
+      text-transform: uppercase;
+    }
+    .rev-slide__meta { flex: 1; min-width: 0; }
+    .rev-slide__name {
+      font-family: var(--f-display); font-size: 16px; font-weight: 700;
+      color: var(--c-cream); line-height: 1.2;
+    }
+    .rev-slide__date {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--c-gold); opacity: .7;
+      margin-top: 2px;
+    }
+    .rev-slide__stars {
+      color: #f59e0b; font-size: 14px; letter-spacing: 2px;
+    }
+    .rev-slide__text {
+      font-size: 14px; font-weight: 300;
+      color: rgba(250,245,236,.72);
+      line-height: 1.75;
+      flex: 1;
+    }
+    .rev-slide__quote {
+      font-family: var(--f-display); font-size: 48px;
+      color: var(--c-gold); opacity: .2;
+      line-height: 1; margin-bottom: -10px;
+      align-self: flex-start;
+    }
+
+    @media (max-width: 900px) {
+      .rev-slide { flex: 0 0 calc((100% - 20px) / 2); }
+    }
+    @media (max-width: 560px) {
+      .rev-slide { flex: 0 0 88%; }
     }
 
     /* ─── CONTACTS ───────────────────────────────────────── */
@@ -1360,10 +1381,10 @@
         <div class="tour-slide"><img src="images/tour2.jpg"  alt="Tour photo 2"/></div>
         <div class="tour-slide"><img src="images/tour3.jpg"  alt="Tour photo 3"/></div>
         <div class="tour-slide"><img src="images/tour4.jpg"  alt="Tour photo 4"/></div>
-        <div class="tour-slide"><img src="images/tour5.jpeg"  alt="Tour photo 5"/></div>
+        <div class="tour-slide"><img src="images/tour5.JPG"  alt="Tour photo 5"/></div>
         <div class="tour-slide"><img src="images/tour6.JPG"  alt="Tour photo 6"/></div>
         <div class="tour-slide"><img src="images/tour7.JPG"  alt="Tour photo 7"/></div>
-        <div class="tour-slide"><img src="images/tour8.jpg"  alt="Tour photo 8"/></div>
+        <div class="tour-slide"><img src="images/tour8.JPG"  alt="Tour photo 8"/></div>
         <div class="tour-slide"><img src="images/tour9.JPG"  alt="Tour photo 9"/></div>
         <div class="tour-slide"><img src="images/tour10.jpg" alt="Tour photo 10"/></div>
         <div class="tour-slide"><img src="images/tour11.jpg" alt="Tour photo 11"/></div>
@@ -1446,18 +1467,18 @@
     <div class="s-head__kicker s-head__kicker--light">What Travelers Say</div>
     <h2 class="s-head__title s-head__title--light" id="rev-h">Real Reviews from<br><em>Real Travelers</em></h2>
   </div>
-  <div class="tour-slider-wrap" data-reveal="scale">
-    <div class="tour-slider-viewport">
-      <div class="tour-slider-track" id="revTrack">
-        <div class="tour-slide"><img src="images/review1.png" alt="Review by Edward"/></div>
-        <div class="tour-slide"><img src="images/review2.png" alt="Review by Ahmed from France"/></div>
-        <div class="tour-slide"><img src="images/review3.png" alt="Review from WhatsApp September 2025"/></div>
-        <div class="tour-slide"><img src="images/review4.png" alt="Review by Nilesh from US"/></div>
-        <div class="tour-slide"><img src="images/review5.png" alt="Review by Saif"/></div>
-        <div class="tour-slide"><img src="images/review6.png" alt="Review by Ezwan"/></div>
-        <div class="tour-slide"><img src="images/review7.png" alt="Review by Khalid"/></div>
-        <div class="tour-slide"><img src="images/review8.png" alt="Review by Peera S"/></div>
-        <div class="tour-slide"><img src="images/review9.png" alt="Review by John"/></div>
+  <div class="rev-slider-wrap" data-reveal="scale">
+    <div class="rev-slider-viewport">
+      <div class="rev-slider-track" id="revTrack">
+        <div class="rev-img-slide"><img src="images/review1.png"  alt="Review by Edward"/></div>
+        <div class="rev-img-slide"><img src="images/review2.png"  alt="Review by Ahmed from France"/></div>
+        <div class="rev-img-slide"><img src="images/review3.png"  alt="Review Sep 2025 WhatsApp"/></div>
+        <div class="rev-img-slide"><img src="images/review4.png"  alt="Review by Nilesh from US"/></div>
+        <div class="rev-img-slide"><img src="images/review5.png"  alt="Review by Saif"/></div>
+        <div class="rev-img-slide"><img src="images/review6.png"  alt="Review by Ezwan"/></div>
+        <div class="rev-img-slide"><img src="images/review7.png"  alt="Review by Khalid"/></div>
+        <div class="rev-img-slide"><img src="images/review8.png"  alt="Review by Peera S"/></div>
+        <div class="rev-img-slide"><img src="images/review9.png"  alt="Review by John"/></div>
       </div>
     </div>
     <div class="tour-slider-nav">
@@ -1557,7 +1578,7 @@
     const track  = document.getElementById('revTrack');
     const dotsEl = document.getElementById('revDots');
     if (!track || !dotsEl) return;
-    const slides = Array.from(track.querySelectorAll('.tour-slide'));
+    const slides = Array.from(track.querySelectorAll('.rev-img-slide'));
     let cur = 0;
 
     for (let i = 0; i < TOTAL; i++) {
