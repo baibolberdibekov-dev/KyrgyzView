@@ -49,7 +49,7 @@
 
     /* ─── RESET ──────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
     body {
       font-family: var(--f-body);
       background: var(--c-cream);
@@ -591,6 +591,7 @@
     /* ─── TOUR PHOTO CONVEYOR SLIDER ─── */
     .tour-slider-wrap {
       max-width: var(--max-w);
+      width: 100%;
       margin: 0 auto;
       position: relative;
     }
@@ -839,8 +840,10 @@
     /* slider wrap reuse from gallery */
     .rev-slider-wrap {
       max-width: var(--max-w);
+      width: 100%;
       margin: 0 auto;
       position: relative;
+      overflow: hidden;
     }
     .rev-slider-viewport {
       overflow: hidden;
@@ -1171,57 +1174,72 @@
       .contacts__inner { grid-template-columns: 1fr; }
     }
     @media (max-width: 640px) {
-      :root { --nav-h: 60px; --gutter: 18px; }
+      :root { --nav-h: 60px; --gutter: 16px; }
 
       /* hero */
       .hero { padding-bottom: 60px; }
-      .hero__title { font-size: clamp(40px, 12vw, 60px); }
-      .hero__sub { font-size: 15px; margin-bottom: 28px; }
-      .hero__book { padding: 8px 16px 8px 14px; gap: 10px; }
-      .hero__book-label { font-size: 14px; }
-      .hero__book-icons img { width: 32px; height: 32px; }
+      .hero__title { font-size: clamp(36px, 11vw, 56px); }
+      .hero__sub { font-size: 14px; margin-bottom: 24px; max-width: 100%; }
+      .hero__btns { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .hero__btn-primary, .hero__btn-secondary { width: 100%; justify-content: center; }
+      .hero__book { padding: 8px 14px 8px 12px; gap: 8px; flex-wrap: wrap; }
+      .hero__book-label { font-size: 13px; }
+      .hero__book-icons img { width: 30px; height: 30px; }
       .hero__scroll { display: none; }
       .hero__badge { padding: 5px 12px; }
       .hero__badge-text { font-size: 11px; }
+      .hero__social { gap: 10px; }
 
       /* marquee */
-      .marquee-item { font-size: 13px; padding: 0 18px; }
+      .marquee-item { font-size: 12px; padding: 0 14px; }
 
       /* why */
-      .why__grid { grid-template-columns: 1fr; gap: 14px; }
-      .why__card { padding: 28px 20px 32px; flex-direction: row; text-align: left; gap: 16px; }
-      .why__card__img { width: 44px; height: 44px; flex-shrink: 0; }
-      .why__card__num { font-size: 38px; top: 12px; right: 16px; }
+      .why__grid { grid-template-columns: 1fr; gap: 12px; }
+      .why__card { padding: 22px 18px 26px; flex-direction: row; text-align: left; gap: 14px; }
+      .why__card__img { width: 40px; height: 40px; flex-shrink: 0; }
+      .why__card__num { font-size: 34px; top: 10px; right: 14px; }
 
-      /* gallery (старые стили для bento — не используются, но оставлены) */
+      /* gallery slider */
+      .tour-slide { flex: 0 0 80%; }
+      .tour-slider-btn { width: 40px; height: 40px; font-size: 18px; }
+
+      /* reviews */
+      .rev-img-slide { flex: 0 0 85%; }
+      .rev-slider-wrap { padding: 0; }
+
+      /* gallery bento */
       .gallery__item:nth-child(1), .gallery__item:nth-child(4) { grid-column: span 12; aspect-ratio: 1.4; }
       .gallery__item:nth-child(2), .gallery__item:nth-child(3) { grid-column: span 12; aspect-ratio: 1.4; }
 
       /* experiences */
       .exp__grid { grid-template-columns: 1fr; }
-      .exp__card__body { padding: 18px 20px 22px; }
+      .exp__card__body { padding: 16px 18px 20px; }
 
       /* how */
-      .how { padding: clamp(60px, 8vw, 100px) var(--gutter); }
-      .how__step { grid-template-columns: 40px 1fr; gap: 14px; }
-      .how__step__num { font-size: 32px; }
-      .how__aside__card { padding: 24px 22px; }
+      .how { padding: clamp(52px, 8vw, 90px) var(--gutter); }
+      .how__step { grid-template-columns: 38px 1fr; gap: 12px; }
+      .how__step__num { font-size: 30px; }
+      .how__aside__card { padding: 22px 18px; }
 
       /* contacts */
-      .contacts__inner { gap: 36px; }
-      .contact-form { padding: 28px 22px; }
-      .contact-form__title { font-size: clamp(20px, 6vw, 26px); margin-bottom: 18px; }
+      .contacts__inner { gap: 32px; }
+      .contact-form { padding: 24px 18px; }
+      .contact-form__title { font-size: clamp(18px, 6vw, 24px); margin-bottom: 16px; }
       .cf-input, .cf-textarea { font-size: 16px; }
       .cf-textarea { min-height: 80px; }
+      .contacts__row { gap: 12px; }
 
       /* footer */
-      .footer__inner { flex-direction: column; align-items: flex-start; gap: 20px; }
-      .footer__nav { gap: 2px; }
+      .footer__inner { flex-direction: column; align-items: flex-start; gap: 18px; }
+      .footer__nav { gap: 2px; flex-wrap: wrap; }
+      .footer__nav a { font-size: 13px; padding: 7px 10px; }
     }
 
     @media (max-width: 400px) {
-      .hero__title { font-size: 38px; }
-      .s-head__title { font-size: 30px; }
+      .hero__title { font-size: 34px; }
+      .s-head__title { font-size: 28px; }
+      .tour-slide { flex: 0 0 90%; }
+      .rev-img-slide { flex: 0 0 92%; }
     }
   </style>
 </head>
@@ -1236,6 +1254,7 @@
     <div class="nav__links" role="list">
       <a class="nav__link" href="#why" role="listitem">About</a>
       <a class="nav__link" href="#tours" role="listitem">Gallery</a>
+      <a class="nav__link" href="#reviews" role="listitem">Reviews</a>
       <a class="nav__link" href="#contacts" role="listitem">Contact</a>
     </div>
     <a class="nav__cta" href="https://wa.me/996703355322" target="_blank" rel="noopener">Book Now</a>
@@ -1246,6 +1265,7 @@
   <div class="nav__drawer" id="drawer" aria-hidden="true">
     <a href="#why">About</a>
     <a href="#tours">Gallery</a>
+    <a href="#reviews">Reviews</a>
     <a href="#contacts">Contact</a>
   </div>
 </header>
@@ -1462,7 +1482,7 @@
 </section>
 
 <!-- ═══ REVIEWS ═══════════════════════════════════════════ -->
-<section class="review-strip" aria-labelledby="rev-h">
+<section class="review-strip" id="reviews" aria-labelledby="rev-h">
   <div class="s-head" data-reveal="up">
     <div class="s-head__kicker s-head__kicker--light">What Travelers Say</div>
     <h2 class="s-head__title s-head__title--light" id="rev-h">Real Reviews from<br><em>Real Travelers</em></h2>
@@ -1559,6 +1579,7 @@
       <a href="#hero">Home</a>
       <a href="#why">About</a>
       <a href="#tours">Gallery</a>
+      <a href="#reviews">Reviews</a>
       <a href="#contacts">Contact</a>
     </nav>
     <p class="footer__copy">
